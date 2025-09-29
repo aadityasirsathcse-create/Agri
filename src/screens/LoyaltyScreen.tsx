@@ -15,7 +15,7 @@ const LoyaltyScreen = () => {
       <ScrollView style={styles.scrollView}>
         <View style={styles.header}>
           <Image
-            source={{ uri: 'https://via.placeholder.com/40' }} // Placeholder for user image
+            source={require('../assets/user.png')}
             style={styles.userImage}
           />
           <View style={styles.headerText}>
@@ -23,7 +23,8 @@ const LoyaltyScreen = () => {
             <Text style={styles.userRole}>Sales & Marketing</Text>
           </View>
           <View style={styles.headerIcons}>
-            {/* Add Search and Bell icons here */}
+            <Image source={require('../assets/search.png')} style={styles.navIcon} />
+            <Image source={require('../assets/noti.png')} style={styles.navIcon} />
           </View>
         </View>
 
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         marginBottom: 5,
+        margin:10,
     },
 });
 
