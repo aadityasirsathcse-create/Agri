@@ -8,8 +8,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../App';
 
-const LoyaltyScreen = () => {
+type LoyaltyScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Loyalty'>;
+
+type Props = {
+  navigation: LoyaltyScreenNavigationProp;
+};
+
+const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -78,7 +86,7 @@ const LoyaltyScreen = () => {
         <View style={styles.rewards}>
           <View style={styles.rewardsHeader}>
             <Text style={styles.rewardsTitle}>Rewards</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('AllRewards')}>
               <Text style={styles.viewAll}>View all →</Text>
             </TouchableOpacity>
           </View>
