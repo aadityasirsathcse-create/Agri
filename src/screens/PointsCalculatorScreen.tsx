@@ -90,7 +90,7 @@ const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
       </View>
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} /><Text>Loyalty</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/social.png')} style={styles.navIcon} /><Text>Social</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Social')}><Image source={require('../assets/social.png')} style={styles.navIcon} /><Text>Social</Text></TouchableOpacity>
         <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} /><Text>Products</Text></TouchableOpacity>
         <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} /><Text>My Activities</Text></TouchableOpacity>
         <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} /><Text>More</Text></TouchableOpacity>

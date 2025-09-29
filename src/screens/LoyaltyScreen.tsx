@@ -124,7 +124,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
 
           <Text>Loyalty</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/social.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Social')}><Image source={require('../assets/social.png')} style={styles.navIcon} />
 
           <Text>Social</Text>
         </TouchableOpacity>
