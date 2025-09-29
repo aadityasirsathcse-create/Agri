@@ -40,6 +40,7 @@ const LoyaltyScreen = () => {
               style={styles.trophyImage}
             />
           </View>
+          <View style={{ height: 1, backgroundColor: "#ccc", marginVertical: 10 }}></View>
           <View style={styles.pointsBreakdown}>
             <View style={styles.breakdownItem}>
               <Image source={require('../assets/points.png')} style={styles.navIcon} />
@@ -81,11 +82,26 @@ const LoyaltyScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.rewardItems}>
-            {/* Map through reward items here */}
             <View style={styles.rewardItem}>
-              <Image source={{uri: 'https://via.placeholder.com/50'}} style={styles.rewardImage} />
+              <Image source={require('../assets/amazon.png')} style={styles.rewardImage} />
               <Text style={styles.rewardName}>Amazon gift card</Text>
               <Text style={styles.rewardValue}>Worth $5000*</Text>
+              <TouchableOpacity style={styles.claimButton}>
+                <Text style={styles.claimButtonText}>Claim</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.rewardItem}>
+              <Image source={require('../assets/air.png')} style={styles.rewardImage} />
+              <Text style={styles.rewardName}>Family trip to </Text>
+              <Text style={styles.rewardValue}>Worth $5000*</Text>
+              <TouchableOpacity style={styles.claimButton}>
+                <Text style={styles.claimButtonText}>Claim</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.rewardItem}>
+              <Image source={require('../assets/chroma.png')} style={styles.rewardImage} />
+              <Text style={styles.rewardName}>Croma discount coupon</Text>
+              <Text style={styles.rewardValue}>30% off. Up to 2,500</Text>
               <TouchableOpacity style={styles.claimButton}>
                 <Text style={styles.claimButtonText}>Claim</Text>
               </TouchableOpacity>
@@ -123,7 +139,7 @@ const LoyaltyScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#e5f9e5ff',
     },
     scrollView: {
         // flex: 1,
@@ -131,8 +147,8 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#FFFFFF',
+        padding: 40,
+        backgroundColor: '#e5f9e5ff',
     },
     userImage: {
         width: 40,
@@ -233,7 +249,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     rewards: {
-        margin: 20,
+        marginHorizontal: 20,
+        marginVertical: 10,
     },
     rewardsHeader: {
         flexDirection: 'row',
@@ -249,39 +266,46 @@ const styles = StyleSheet.create({
         color: '#4CAF50',
     },
     rewardItems: {
-        // Add styles for the container of reward items if needed
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     rewardItem: {
-        backgroundColor: '#FFFFFF',
-        padding: 20,
-        borderRadius: 10,
-        marginBottom: 10,
+        backgroundColor: '#c3f9c3ff',
+        borderRadius: 15,
+        padding: 10,
+        width: '32%',
+        alignItems: 'center',
     },
     rewardImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        alignSelf: 'center',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
         marginBottom: 10,
     },
     rewardName: {
         fontWeight: 'bold',
         textAlign: 'center',
+        fontSize: 12,
+        minHeight: 30,
+        marginBottom: 5,
     },
     rewardValue: {
         color: '#666',
         textAlign: 'center',
+        fontSize: 10,
+        minHeight: 22,
         marginBottom: 10,
     },
     claimButton: {
         backgroundColor: '#4CAF50',
         paddingVertical: 10,
-        borderRadius: 5,
+        paddingHorizontal: 25,
+        borderRadius: 8,
     },
     claimButtonText: {
-        color: '#FFFFFF',
-        textAlign: 'center',
+        color: 'white',
         fontWeight: 'bold',
+        fontSize: 14,
     },
     bottomNav: {
         flexDirection: 'row',
