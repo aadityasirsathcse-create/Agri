@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,45 +11,62 @@ import {
 import { useNavigation } from "@react-navigation/native";
 
 const AllRewardsScreen = () => {
-    const navigation = useNavigation();
-  const rewards = [
+        const navigation = useNavigation();
+  const [rewards, setRewards] = useState([
     {
       name: 'Amazon gift card worth $5000',
       points: '1,200 points',
       image: require('../assets/amazon.png'),
+      quantity: 0,
     },
     {
       name: 'Family trip to Cappadocia, Turkey',
       points: '12,000 points',
       image: require('../assets/air.png'),
+      quantity: 0,
     },
     {
       name: 'Croma discount coupon - 30% off up to 2,500',
       points: '6,200 points',
       image: require('../assets/chroma.png'),
+      quantity: 0,
     },
     {
       name: 'Amazon gift card worth $5000',
       points: '1,200 points',
       image: require('../assets/amazon.png'),
+      quantity: 0,
     },
     {
       name: 'Family trip to Cappadocia, Turkey',
       points: '12,000 points',
       image: require('../assets/air.png'),
+      quantity: 0,
     },
     {
       name: 'Croma discount coupon - 30% off up to 2,500',
       points: '6,200 points',
       image: require('../assets/chroma.png'),
+      quantity: 0,
     },
-  ];
+  ]);
+
+  const handleQuantityChange = (index: number, amount: number) => {
+    const newRewards = [...rewards];
+    const newQuantity = newRewards[index].quantity + amount;
+    if (newQuantity >= 0) {
+      newRewards[index].quantity = newQuantity;
+      setRewards(newRewards);
+    }
+  };
+
+  const totalQuantity = rewards.reduce((sum, reward) => sum + reward.quantity, 0);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/back.png')} style={styles.backButton}/>
+          <Image source={require('../assets/back.png')} style={styles.backButton} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Loyalty</Text>
         <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
@@ -65,11 +82,11 @@ const AllRewardsScreen = () => {
                 <Text style={styles.rewardPoints}>{reward.points}</Text>
               </View>
               <View style={styles.quantityControl}>
-                <TouchableOpacity style={styles.quantityButton}>
+                <TouchableOpacity style={styles.quantityButton} onPress={() => handleQuantityChange(index, -1)}>
                   <Text style={styles.quantityButtonText}>-</Text>
                 </TouchableOpacity>
-                <Text style={styles.quantityText}>0</Text>
-                <TouchableOpacity style={styles.quantityButton}>
+                <Text style={styles.quantityText}>{reward.quantity}</Text>
+                <TouchableOpacity style={styles.quantityButton} onPress={() => handleQuantityChange(index, 1)}>
                   <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -77,6 +94,13 @@ const AllRewardsScreen = () => {
           ))}
         </View>
       </ScrollView>
+      {totalQuantity > 0 && (
+        <View style={styles.redeemButtonContainer}>
+            <TouchableOpacity style={styles.redeemButton}>
+                <Text style={styles.redeemButtonText}>Redeem</Text>
+            </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} />
 
@@ -200,6 +224,21 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
         marginBottom: 5,
+    },
+    redeemButtonContainer: {
+        backgroundColor: '#FFFFFF',
+        padding: 20,
+    },
+    redeemButton: {
+        backgroundColor: '#4CAF50',
+        paddingVertical: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    redeemButtonText: {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        fontSize: 18,
     },
 });
 
