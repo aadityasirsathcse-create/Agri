@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -71,6 +71,22 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
   ]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [email, setEmail] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState<string[]>(new Array(6).fill(''));
+  const [timer, setTimer] = useState(29);
+  const inputRefs = useRef<(TextInput | null)[]>([]);
+
+  useEffect(() => {
+    let interval: any;
+    if (otpSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      // Allow resend
+    }
+    return () => clearInterval(interval);
+  }, [otpSent, timer]);
 
   const handleQuantityChange = (index: number, amount: number) => {
     const newRewards = [...rewards];
@@ -78,6 +94,36 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
     if (newQuantity >= 0) {
       newRewards[index].quantity = newQuantity;
       setRewards(newRewards);
+    }
+  };
+
+  const handleSendOtp = () => {
+    setOtpSent(true);
+    setTimer(29); // Reset timer
+  };
+
+  const handleResendOtp = () => {
+    setOtp(new Array(6).fill(''));
+    setTimer(29);
+    // logic to resend OTP
+  };
+
+  const handleOtpChange = (text: string, index: number) => {
+    const newOtp = [...otp];
+    newOtp[index] = text;
+    setOtp(newOtp);
+
+    if (text && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (
+    { nativeEvent: { key: keyValue } }: any,
+    index: number,
+  ) => {
+    if (keyValue === 'Backspace' && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
@@ -119,16 +165,20 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
           <ScrollView style={styles.scrollView}>
             <View style={styles.confirmationContainer}>
               <Text style={styles.confirmationTitle}>Confirm Order</Text>
-              <Text style={styles.confirmationInstructions}>
-                Please check your order items before placing order. Once you
-                successfully placed your order, your card request will be
-                processed and delivered to your home address in 4-5 working
-                days.
-              </Text>
-              <Text style={styles.confirmationInstructions}>
-                All the updates regarding your card will be sent to your
-                official e-mail id.
-              </Text>
+              {!otpSent && (
+                <>
+                  <Text style={styles.confirmationInstructions}>
+                    Please check your order items before placing order. Once you
+                    successfully placed your order, your card request will be
+                    processed and delivered to your home address in 4-5 working
+                    days.
+                  </Text>
+                  <Text style={styles.confirmationInstructions}>
+                    All the updates regarding your card will be sent to your
+                    official e-mail id.
+                  </Text>
+                </>
+              )}
               <Text style={styles.orderItemsTitle}>Order Items:</Text>
 
               {selectedRewards.map((reward, index) => (
@@ -161,12 +211,57 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
+                editable={!otpSent}
               />
+
+              {otpSent && (
+                <>
+                  <View style={styles.timerContainer}>
+                    <Text style={styles.timerText}>
+                      00:{timer < 10 ? `0${timer}` : timer}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={handleResendOtp}
+                      disabled={timer > 0}
+                    >
+                      <Text
+                        style={
+                          timer > 0 ? styles.resendDisabled : styles.resendText
+                        }
+                      >
+                        Resend OTP
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.inputLabel}>Enter OTP</Text>
+                  <View style={styles.otpInputContainer}>
+                    {otp.map((digit, index) => (
+                      <TextInput
+                        key={index}
+                        ref={ref => {
+                          inputRefs.current[index] = ref;
+                        }}
+                        style={styles.otpInput}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        onChangeText={text => handleOtpChange(text, index)}
+                        onKeyPress={e => handleKeyPress(e, index)}
+                        value={digit}
+                      />
+                    ))}
+                  </View>
+                </>
+              )}
             </View>
           </ScrollView>
           <View style={styles.redeemButtonContainer}>
-            <TouchableOpacity style={styles.redeemButton}>
-              <Text style={styles.redeemButtonText}>Send OTP</Text>
+            <TouchableOpacity
+              style={styles.redeemButton}
+              onPress={otpSent ? () => {} : handleSendOtp}
+            >
+              <Text style={styles.redeemButtonText}>
+                {otpSent ? 'Place Order' : 'Send OTP'}
+              </Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -486,6 +581,44 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 16,
     marginBottom: 20,
+  },
+  timerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  timerText: {
+    fontSize: 16,
+    color: '#666',
+  },
+  resendText: {
+    fontSize: 16,
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
+  resendDisabled: {
+    fontSize: 16,
+    color: '#aaa',
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  otpInputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  otpInput: {
+    width: 45,
+    height: 45,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    textAlign: 'center',
+    fontSize: 20,
+    borderRadius: 5,
   },
 });
 
