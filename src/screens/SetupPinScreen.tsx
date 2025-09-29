@@ -9,10 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-type RootStackParamList = {
-  SetupPin: undefined;
-};
+import { RootStackParamList } from '../../App';
 
 type SetupPinScreenNavigationProp = StackNavigationProp<RootStackParamList, 'SetupPin'>;
 
@@ -67,8 +64,8 @@ const SetupPinScreen: React.FC<Props> = ({ navigation }) => {
     const isConfirmPinComplete = confirmPin.every(digit => digit !== '');
     if (isPinComplete && isConfirmPinComplete) {
       if (pin.join('') === confirmPin.join('')) {
-        // PINs match, proceed with navigation or API call
-        console.log('PIN setup successful');
+        // PINs match, proceed with navigation
+        navigation.navigate('Loyalty');
       } else {
         alert('PINs do not match.');
       }
@@ -201,6 +198,8 @@ const styles = StyleSheet.create({
 });
 
 export default SetupPinScreen;
+
+
 function alert(arg0: string) {
     throw new Error('Function not implemented.');
 }
