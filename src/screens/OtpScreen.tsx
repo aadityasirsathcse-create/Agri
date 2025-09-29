@@ -11,11 +11,7 @@ import {
 } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-type RootStackParamList = {
-  Login: undefined;
-  Otp: { mobileNumber: string };
-};
+import { RootStackParamList } from '../../App';
 
 type OtpScreenRouteProp = RouteProp<RootStackParamList, 'Otp'>;
 type OtpScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Otp'>;
@@ -47,6 +43,15 @@ const OtpScreen: React.FC<Props> = ({ route, navigation }) => {
       inputRefs.current[index - 1]?.focus();
     }
   };
+    const handleSubmit = () => {
+    const isOtpComplete = otp.every(digit => digit !== '');
+    if (isOtpComplete) {
+      navigation.navigate('SetupPin');
+    } else {
+      alert('Please enter the complete OTP.');
+    }
+  };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -97,7 +102,7 @@ const OtpScreen: React.FC<Props> = ({ route, navigation }) => {
           <Text style={styles.resendText}>Resend OTP</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
 
@@ -236,3 +241,7 @@ const styles = StyleSheet.create({
 });
 
 export default OtpScreen;
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+
