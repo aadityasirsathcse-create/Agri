@@ -8,6 +8,8 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -70,7 +72,6 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [email, setEmail] = useState('');
 
-
   const handleQuantityChange = (index: number, amount: number) => {
     const newRewards = [...rewards];
     const newQuantity = newRewards[index].quantity + amount;
@@ -82,100 +83,148 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
 
   const getPointsFromString = (pointsString: string) => {
     return parseInt(pointsString.replace(/,/g, '').split(' ')[0], 10);
-  }
+  };
 
   const selectedRewards = rewards.filter(reward => reward.quantity > 0);
   const totalPointsDeducted = selectedRewards.reduce(
     (sum, reward) => sum + getPointsFromString(reward.points) * reward.quantity,
-    0
+    0,
   );
 
-
-  const totalQuantity = rewards.reduce((sum, reward) => sum + reward.quantity, 0);
+  const totalQuantity = rewards.reduce(
+    (sum, reward) => sum + reward.quantity,
+    0,
+  );
 
   if (showConfirmation) {
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => setShowConfirmation(false)}>
-                <Image source={require('../assets/back.png')} style={styles.backButton} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Rewards</Text>
-                <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
-            </View>
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.confirmationContainer}>
-                    <Text style={styles.confirmationTitle}>Confirm Order</Text>
-                    <Text style={styles.confirmationInstructions}>
-                        Please check your order items before placing order.
-                        Once you successfully placed your order, your card request will be processed and delivered to your home address in 4-5 working days.
-                    </Text>
-                    <Text style={styles.confirmationInstructions}>
-                        All the updates regarding your card will be sent to your official e-mail id.
-                    </Text>
-                    <Text style={styles.orderItemsTitle}>Order Items:</Text>
-                    
-                    {selectedRewards.map((reward, index) => (
-                        <View key={index} style={styles.orderItem}>
-                            <Image source={reward.image} style={styles.rewardImage} />
-                            <View style={styles.rewardDetails}>
-                                <Text style={styles.rewardName}>{reward.name}</Text>
-                                <Text style={styles.rewardPoints}>Quantity : {reward.quantity}</Text>
-                            </View>
-                            <Text style={styles.orderItemPoints}>{getPointsFromString(reward.points) * reward.quantity}</Text>
-                        </View>
-                    ))}
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => setShowConfirmation(false)}>
+              <Image
+                source={require('../assets/back.png')}
+                style={styles.backButton}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Rewards</Text>
+            <Image
+              source={require('../assets/noti.png')}
+              style={styles.bellIcon}
+            />
+          </View>
+          <ScrollView style={styles.scrollView}>
+            <View style={styles.confirmationContainer}>
+              <Text style={styles.confirmationTitle}>Confirm Order</Text>
+              <Text style={styles.confirmationInstructions}>
+                Please check your order items before placing order. Once you
+                successfully placed your order, your card request will be
+                processed and delivered to your home address in 4-5 working
+                days.
+              </Text>
+              <Text style={styles.confirmationInstructions}>
+                All the updates regarding your card will be sent to your
+                official e-mail id.
+              </Text>
+              <Text style={styles.orderItemsTitle}>Order Items:</Text>
 
-                    <View style={styles.totalPointsContainer}>
-                        <Text style={styles.totalPointsText}>Total Points Deducted :</Text>
-                        <Text style={styles.totalPointsValue}>{totalPointsDeducted}</Text>
-                    </View>
-
-                    <Text style={styles.emailLabel}>Email ID</Text>
-                    <TextInput
-                        style={styles.emailInput}
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                    />
+              {selectedRewards.map((reward, index) => (
+                <View key={index} style={styles.orderItem}>
+                  <Image source={reward.image} style={styles.rewardImage} />
+                  <View style={styles.rewardDetails}>
+                    <Text style={styles.rewardName}>{reward.name}</Text>
+                    <Text style={styles.rewardPoints}>
+                      Quantity : {reward.quantity}
+                    </Text>
+                  </View>
+                  <Text style={styles.orderItemPoints}>
+                    {getPointsFromString(reward.points) * reward.quantity}
+                  </Text>
                 </View>
-            </ScrollView>
-            <View style={styles.redeemButtonContainer}>
-                <TouchableOpacity style={styles.redeemButton}>
-                    <Text style={styles.redeemButtonText}>Send OTP</Text>
-                </TouchableOpacity>
+              ))}
+
+              <View style={styles.totalPointsContainer}>
+                <Text style={styles.totalPointsText}>
+                  Total Points Deducted :
+                </Text>
+                <Text style={styles.totalPointsValue}>
+                  {totalPointsDeducted}
+                </Text>
+              </View>
+
+              <Text style={styles.emailLabel}>Email ID</Text>
+              <TextInput
+                style={styles.emailInput}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+              />
             </View>
-            <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} />
+          </ScrollView>
+          <View style={styles.redeemButtonContainer}>
+            <TouchableOpacity style={styles.redeemButton}>
+              <Text style={styles.redeemButtonText}>Send OTP</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
 
-          <Text>Loyalty</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/social.png')} style={styles.navIcon} />
+        <View style={styles.bottomNav}>
+          <TouchableOpacity style={styles.navItem}>
+            <Image
+              source={require('../assets/Group.png')}
+              style={styles.navIcon}
+            />
 
-          <Text>Social</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} />
+            <Text>Loyalty</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.navItem}>
+            <Image
+              source={require('../assets/social.png')}
+              style={styles.navIcon}
+            />
 
-          <Text>Products</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} />
+            <Text>Social</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.navItem}>
+            <Image
+              source={require('../assets/product.png')}
+              style={styles.navIcon}
+            />
 
-          <Text>My Activities</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} />
+            <Text>Products</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.navItem}>
+            <Image
+              source={require('../assets/activity.png')}
+              style={styles.navIcon}
+            />
 
-          <Text>More</Text>
-        </TouchableOpacity>
-      </View>
-        </SafeAreaView>
-    )
+            <Text>My Activities</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.navItem}>
+            <Image
+              source={require('../assets/more.png')}
+              style={styles.navIcon}
+            />
+
+            <Text>More</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/back.png')} style={styles.backButton} />
+          <Image
+            source={require('../assets/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Loyalty</Text>
         <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
@@ -193,13 +242,15 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
               <View style={styles.quantityControl}>
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => handleQuantityChange(index, -1)}>
+                  onPress={() => handleQuantityChange(index, -1)}
+                >
                   <Text style={styles.quantityButtonText}>-</Text>
                 </TouchableOpacity>
                 <Text style={styles.quantityText}>{reward.quantity}</Text>
                 <TouchableOpacity
                   style={styles.quantityButton}
-                  onPress={() => handleQuantityChange(index, 1)}>
+                  onPress={() => handleQuantityChange(index, 1)}
+                >
                   <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -211,29 +262,50 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.redeemButtonContainer}>
           <TouchableOpacity
             style={styles.redeemButton}
-            onPress={() => setShowConfirmation(true)}>
+            onPress={() => setShowConfirmation(true)}
+          >
             <Text style={styles.redeemButtonText}>Redeem</Text>
           </TouchableOpacity>
         </View>
       )}
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem}>
+          <Image
+            source={require('../assets/Group.png')}
+            style={styles.navIcon}
+          />
 
           <Text>Loyalty</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/social.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem}>
+          <Image
+            source={require('../assets/social.png')}
+            style={styles.navIcon}
+          />
 
           <Text>Social</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem}>
+          <Image
+            source={require('../assets/product.png')}
+            style={styles.navIcon}
+          />
 
           <Text>Products</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem}>
+          <Image
+            source={require('../assets/activity.png')}
+            style={styles.navIcon}
+          />
 
           <Text>My Activities</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} />
+        <TouchableOpacity style={styles.navItem}>
+          <Image
+            source={require('../assets/more.png')}
+            style={styles.navIcon}
+          />
 
           <Text>More</Text>
         </TouchableOpacity>
@@ -367,7 +439,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginBottom: 15,
-    lineHeight: 20
+    lineHeight: 20,
   },
   orderItemsTitle: {
     fontSize: 16,
@@ -381,18 +453,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   orderItemPoints: {
-      fontSize: 16,
-      fontWeight: 'bold'
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   totalPointsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      marginTop: 10,
-      marginBottom: 20,
-      paddingRight: 10
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 10,
+    marginBottom: 20,
+    paddingRight: 10,
   },
   totalPointsText: {
     fontSize: 16,
@@ -404,17 +476,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   emailLabel: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      marginBottom: 10
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   emailInput: {
-      backgroundColor: '#f7f7f7',
-      borderRadius: 5,
-      padding: 15,
-      fontSize: 16,
-      marginBottom: 20
-  }
+    backgroundColor: '#f7f7f7',
+    borderRadius: 5,
+    padding: 15,
+    fontSize: 16,
+    marginBottom: 20,
+  },
 });
 
 export default AllRewardsScreen;
