@@ -8,6 +8,7 @@ import SetupPinScreen from './src/screens/SetupPinScreen';
 import LoyaltyScreen from './src/screens/LoyaltyScreen';
 import AllRewardsScreen from './src/screens/AllRewardsScreen';
 import PointsCalculatorScreen from './src/screens/PointsCalculatorScreen';
+import RewardHistoryScreen from './src/screens/RewardHistoryScreen';
 import { SafeAreaView } from 'react-native';
 
 export type RootStackParamList = {
@@ -17,6 +18,7 @@ export type RootStackParamList = {
   Loyalty: undefined;
   AllRewards: undefined;
   PointsCalculator: undefined;
+    RewardHistory: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -33,6 +35,7 @@ const App = () => {
         <Stack.Screen name="Loyalty" component={LoyaltyScreen} />
         <Stack.Screen name="AllRewards" component={AllRewardsScreen} />
         <Stack.Screen name="PointsCalculator" component={PointsCalculatorScreen} />
+        <Stack.Screen name="RewardHistory" component={RewardHistoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
     </SafeAreaView>

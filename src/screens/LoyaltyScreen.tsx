@@ -76,7 +76,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
 
                 <Text style={styles.actionText}>Points Calculator</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('RewardHistory')}>
     <Image source={require('../assets/cal.png')} style={styles.navIcon} />
 
                 <Text style={styles.actionText}>Rewards History</Text>
