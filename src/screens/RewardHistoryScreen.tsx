@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type RewardHistoryScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -76,25 +77,25 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
       approvedDate: '12 March 2023',
     },
     {
-        name: 'Amazon gift card',
-        status: 'Waiting for approval',
-        image: require('../assets/amazon.png'),
-        trackingId: '01AGC9378288899',
-        points: 1200,
-        email: 'ajith.kumar@company.com',
-        claimedDate: '12 March 2023',
-        approvedDate: '-',
-      },
-      {
-        name: 'Croma gift card worth 10,000',
-        status: 'Waiting for approval',
-        image: require('../assets/chroma.png'),
-        trackingId: '01AGC9378288899',
-        points: 10000,
-        email: 'ajith.kumar@company.com',
-        claimedDate: '11 March 2023',
-        approvedDate: '-',
-      },
+      name: 'Amazon gift card',
+      status: 'Waiting for approval',
+      image: require('../assets/amazon.png'),
+      trackingId: '01AGC9378288899',
+      points: 1200,
+      email: 'ajith.kumar@company.com',
+      claimedDate: '12 March 2023',
+      approvedDate: '-',
+    },
+    {
+      name: 'Croma gift card worth 10,000',
+      status: 'Waiting for approval',
+      image: require('../assets/chroma.png'),
+      trackingId: '01AGC9378288899',
+      points: 10000,
+      email: 'ajith.kumar@company.com',
+      claimedDate: '11 March 2023',
+      approvedDate: '-',
+    },
   ];
 
   const totalHistory = historyItems.length;
@@ -107,14 +108,19 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/back.png')} style={styles.backButton} />
+          <Image
+            source={require('../assets/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Loyalty</Text>
         <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.historyContainer}>
-          <Text style={styles.historyTitle}>Purchase History ({totalHistory})</Text>
+          <Text style={styles.historyTitle}>
+            Purchase History ({totalHistory})
+          </Text>
           {historyItems.map((item, index) => (
             <View key={index} style={styles.historyItemWrapper}>
               <View style={styles.historyItem}>
@@ -122,13 +128,26 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
                 <View style={styles.itemDetails}>
                   <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemStatus}>
-                    Status : <Text style={item.status === 'Approved' ? styles.approved : styles.waiting}>{item.status}</Text>
+                    Status :{' '}
+                    <Text
+                      style={
+                        item.status === 'Approved'
+                          ? styles.approved
+                          : styles.waiting
+                      }
+                    >
+                      {item.status}
+                    </Text>
                   </Text>
                 </View>
                 <TouchableOpacity onPress={() => toggleExpand(index)}>
-                  <Image 
-                    source={expandedIndex === index ? require('../assets/up_arrow.png') : require('../assets/down_arrow.png')} 
-                    style={styles.arrowIcon} 
+                  <Image
+                    source={
+                      expandedIndex === index
+                        ? require('../assets/up_arrow.png')
+                        : require('../assets/down_arrow.png')
+                    }
+                    style={styles.arrowIcon}
                   />
                 </TouchableOpacity>
               </View>
@@ -152,7 +171,9 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
                   </View>
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>Date approved</Text>
-                    <Text style={styles.detailValue}>: {item.approvedDate}</Text>
+                    <Text style={styles.detailValue}>
+                      : {item.approvedDate}
+                    </Text>
                   </View>
                 </View>
               )}
@@ -161,11 +182,39 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </ScrollView>
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} /><Text>Loyalty</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Social')}><Image source={require('../assets/social.png')} style={styles.navIcon} /><Text>Social</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} /><Text>Products</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} /><Text>My Activities</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} /><Text>More</Text></TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Loyalty')}
+        >
+          <Icon name="trophy-outline" size={24} style={styles.navIcon} />
+          <Text style={{ color: '#4CAF50' }}>Loyalty</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Social')}
+        >
+          <Icon name="account-group-outline" size={24} style={styles.navIcon} />
+          <Text>Social</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Products')}
+        >
+          <Icon name="store-outline" size={24} style={styles.navIcon} />
+          <Text>Products</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon
+            name="clipboard-text-outline"
+            size={24}
+            style={styles.navIcon}
+          />
+          <Text>My Activities</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
+          <Text>More</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

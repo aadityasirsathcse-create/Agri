@@ -13,29 +13,33 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-type SocialScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Social'>;
+type SocialScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Social'
+>;
 
 type Props = {
   navigation: SocialScreenNavigationProp;
 };
 
 interface Post {
-    author: string;
-    time: string;
-    content: string;
-    userImage: any;
-    images: any[];
-    likes: number;
-    comments: number;
-    shares: number;
-    liked: boolean;
+  author: string;
+  time: string;
+  content: string;
+  userImage: any;
+  images: any[];
+  likes: number;
+  comments: number;
+  shares: number;
+  liked: boolean;
 }
 
 const initialPosts: Post[] = [
   {
     author: 'Harish Ramu',
     time: '1d ago',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea',
     likes: 12,
     comments: 5,
     shares: 2,
@@ -46,7 +50,8 @@ const initialPosts: Post[] = [
   {
     author: 'Anusha Saran',
     time: '2d ago',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
     userImage: require('../assets/user.png'),
     images: [
       require('../assets/img.png'),
@@ -59,19 +64,16 @@ const initialPosts: Post[] = [
     liked: false,
   },
   {
-      author: 'john',
-      time: '9d ago',
-      content: 'dolor sit amet, consectetur adipiscing elit, sed do.',
-      userImage: require('../assets/user.png'),
-      images: [
-        require('../assets/img.png'),
-        require('../assets/img.png'),
-      ],
-      likes: 9,
-      comments: 6,
-      shares: 3,
-      liked: false,
-    },
+    author: 'john',
+    time: '9d ago',
+    content: 'dolor sit amet, consectetur adipiscing elit, sed do.',
+    userImage: require('../assets/user.png'),
+    images: [require('../assets/img.png'), require('../assets/img.png')],
+    likes: 9,
+    comments: 6,
+    shares: 3,
+    liked: false,
+  },
 ];
 
 const SocialScreen: React.FC<Props> = ({ navigation }) => {
@@ -93,22 +95,35 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerUser}>
-            <Image source={require('../assets/user.png')} style={styles.userImage} />
-            <View>
-                <Text style={styles.userName}>Harish Ramu</Text>
-                <Text style={styles.userRole}>Sales & Marketing</Text>
-            </View>
+          <Image
+            source={require('../assets/user.png')}
+            style={styles.userImage}
+          />
+          <View>
+            <Text style={styles.userName}>Harish Ramu</Text>
+            <Text style={styles.userRole}>Sales & Marketing</Text>
+          </View>
         </View>
         <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.startWritingContainer}>
-            <ImageBackground source={require('../assets/bg.png')} style={styles.bg}>
-          <Text style={styles.startWritingTitle}>Hey</Text>
-          <Text style={styles.startWritingSubtitle}>What's on your mind today?</Text>
-           <TouchableOpacity style={styles.startWritingButton} onPress={() => navigation.navigate('CreatePost')}>
-            <Text style={styles.startWritingButtonText}>Start Writing...</Text>
-          </TouchableOpacity>
+          <ImageBackground
+            source={require('../assets/bg.png')}
+            style={styles.bg}
+          >
+            <Text style={styles.startWritingTitle}>Hey</Text>
+            <Text style={styles.startWritingSubtitle}>
+              What's on your mind today?
+            </Text>
+            <TouchableOpacity
+              style={styles.startWritingButton}
+              onPress={() => navigation.navigate('CreatePost')}
+            >
+              <Text style={styles.startWritingButtonText}>
+                Start Writing...
+              </Text>
+            </TouchableOpacity>
           </ImageBackground>
         </View>
         {posts.map((post, index) => (
@@ -132,29 +147,78 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
               </ScrollView>
             )}
             <View style={styles.postActions}>
-              <TouchableOpacity style={styles.actionButton} onPress={() => handleLike(index)}>
-                <Icon name={post.liked ? "thumb-up" : "thumb-up-outline"} size={20} color={post.liked ? "#4CAF50" : "#666"} />
-                <Text style={[styles.actionText, { color: post.liked ? "#4CAF50" : "#666" }]}>{post.likes > 0 && post.likes}</Text>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => handleLike(index)}
+              >
+                <Icon
+                  name={post.liked ? 'thumb-up' : 'thumb-up-outline'}
+                  size={20}
+                  color={post.liked ? '#4CAF50' : '#666'}
+                />
+                <Text
+                  style={[
+                    styles.actionText,
+                    { color: post.liked ? '#4CAF50' : '#666' },
+                  ]}
+                >
+                  {post.likes > 0 && post.likes}
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Comments', { post: post })}>
-    <Icon name="comment-outline" size={20} color="#666" />
-    <Text style={styles.actionText}>{post.comments > 0 && post.comments}</Text>
-</TouchableOpacity>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => navigation.navigate('Comments', { post: post })}
+              >
+                <Icon name="comment-outline" size={20} color="#666" />
+                <Text style={styles.actionText}>
+                  {post.comments > 0 && post.comments}
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity style={styles.actionButton}>
                 <Icon name="share-outline" size={20} color="#666" />
-                <Text style={styles.actionText}>{post.shares > 0 && post.shares}</Text>
+                <Text style={styles.actionText}>
+                  {post.shares > 0 && post.shares}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </ScrollView>
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Loyalty')}><Image source={require('../assets/Group.png')} style={styles.navIcon} /><Text>Loyalty</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/social.png')} style={styles.navIcon} /><Text style={{color:"#4CAF50"}}>Social</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} /><Text>Products</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} /><Text>My Activities</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} /><Text>More</Text></TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Loyalty')}
+        >
+          <Icon name="trophy-outline" size={24} style={styles.navIcon} />
+          <Text>Loyalty</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Social')}
+        >
+          <Icon name="account-group-outline" size={24} style={styles.navIcon} />
+          <Text style={{ color: '#4CAF50' }}>Social</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Products')}
+        >
+          <Icon name="store-outline" size={24} style={styles.navIcon} />
+          <Text>Products</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon
+            name="clipboard-text-outline"
+            size={24}
+            style={styles.navIcon}
+          />
+          <Text>My Activities</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
+          <Text>More</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -202,10 +266,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
-  bg:{
+  bg: {
     width: '100%',
     alignItems: 'center',
-    padding:20
+    padding: 20,
   },
   startWritingTitle: {
     fontSize: 20,
@@ -231,7 +295,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0'
+    borderBottomColor: '#f0f0f0',
   },
   postHeader: {
     flexDirection: 'row',

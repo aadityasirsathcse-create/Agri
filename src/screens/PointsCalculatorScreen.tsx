@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type PointsCalculatorScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,15 +30,45 @@ interface Product {
 
 const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
   const [products, setProducts] = useState<Product[]>([
-    { name: 'Hybritz', pointsText: '1Ltr / 30 points', points: 30, quantity: 0 },
+    {
+      name: 'Hybritz',
+      pointsText: '1Ltr / 30 points',
+      points: 30,
+      quantity: 0,
+    },
     { name: 'Pearl', pointsText: '1Ltr / 60 points', points: 60, quantity: 0 },
-    { name: 'Topgun - Df', pointsText: '1Ltr / 40 points', points: 40, quantity: 0 },
-    { name: 'Liquiflo', pointsText: '1Ltr / 30 points', points: 30, quantity: 0 },
-    { name: 'Fertis Wg', pointsText: '1kg / 100 points', points: 100, quantity: 0 },
+    {
+      name: 'Topgun - Df',
+      pointsText: '1Ltr / 40 points',
+      points: 40,
+      quantity: 0,
+    },
+    {
+      name: 'Liquiflo',
+      pointsText: '1Ltr / 30 points',
+      points: 30,
+      quantity: 0,
+    },
+    {
+      name: 'Fertis Wg',
+      pointsText: '1kg / 100 points',
+      points: 100,
+      quantity: 0,
+    },
     { name: 'Tussle', pointsText: '1Ltr / 30 points', points: 30, quantity: 0 },
-    { name: 'Hybritz', pointsText: '1Ltr / 60 points', points: 60, quantity: 0 },
+    {
+      name: 'Hybritz',
+      pointsText: '1Ltr / 60 points',
+      points: 60,
+      quantity: 0,
+    },
     { name: 'Pearl', pointsText: '1Ltr / 40 points', points: 40, quantity: 0 },
-    { name: 'Topgun - Df', pointsText: '1Ltr / 30 points', points: 30, quantity: 0 },
+    {
+      name: 'Topgun - Df',
+      pointsText: '1Ltr / 30 points',
+      points: 30,
+      quantity: 0,
+    },
   ]);
 
   const handleQuantityChange = (index: number, amount: number) => {
@@ -51,49 +82,91 @@ const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
 
   const totalPoints = products.reduce(
     (sum, product) => sum + product.points * product.quantity,
-    0
+    0,
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/back.png')} style={styles.backButton} />
+          <Image
+            source={require('../assets/back.png')}
+            style={styles.backButton}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Loyalty</Text>
         <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.calculatorContainer}>
-            <Text style={styles.calculatorTitle}>Points Calculator</Text>
-            {products.map((product, index) => (
-                <View key={index} style={styles.productItem}>
-                    <View style={styles.productDetails}>
-                        <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPointsText}>{product.pointsText}</Text>
-                    </View>
-                    <View style={styles.quantityControl}>
-                        <TouchableOpacity style={styles.quantityButton} onPress={() => handleQuantityChange(index, -1)}>
-                            <Text style={styles.quantityButtonText}>-</Text>
-                        </TouchableOpacity>
-                        <Text style={styles.quantityText}>{product.quantity}</Text>
-                        <TouchableOpacity style={styles.quantityButton} onPress={() => handleQuantityChange(index, 1)}>
-                            <Text style={styles.quantityButtonText}>+</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            ))}
+          <Text style={styles.calculatorTitle}>Points Calculator</Text>
+          {products.map((product, index) => (
+            <View key={index} style={styles.productItem}>
+              <View style={styles.productDetails}>
+                <Text style={styles.productName}>{product.name}</Text>
+                <Text style={styles.productPointsText}>
+                  {product.pointsText}
+                </Text>
+              </View>
+              <View style={styles.quantityControl}>
+                <TouchableOpacity
+                  style={styles.quantityButton}
+                  onPress={() => handleQuantityChange(index, -1)}
+                >
+                  <Text style={styles.quantityButtonText}>-</Text>
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{product.quantity}</Text>
+                <TouchableOpacity
+                  style={styles.quantityButton}
+                  onPress={() => handleQuantityChange(index, 1)}
+                >
+                  <Text style={styles.quantityButtonText}>+</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
         </View>
       </ScrollView>
-       <View style={styles.totalContainer}>
-        <Text style={styles.totalPointsText}>Total Points : <Text style={styles.totalPointsValue}>{totalPoints}</Text></Text>
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalPointsText}>
+          Total Points :{' '}
+          <Text style={styles.totalPointsValue}>{totalPoints}</Text>
+        </Text>
       </View>
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/Group.png')} style={styles.navIcon} /><Text>Loyalty</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Social')}><Image source={require('../assets/social.png')} style={styles.navIcon} /><Text>Social</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/product.png')} style={styles.navIcon} /><Text>Products</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/activity.png')} style={styles.navIcon} /><Text>My Activities</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}><Image source={require('../assets/more.png')} style={styles.navIcon} /><Text>More</Text></TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Loyalty')}
+        >
+          <Icon name="trophy-outline" size={24} style={styles.navIcon} />
+          <Text style={{ color: '#4CAF50' }}>Loyalty</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Social')}
+        >
+          <Icon name="account-group-outline" size={24} style={styles.navIcon} />
+          <Text>Social</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.navItem}
+          onPress={() => navigation.navigate('Products')}
+        >
+          <Icon name="store-outline" size={24} style={styles.navIcon} />
+          <Text>Products</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon
+            name="clipboard-text-outline"
+            size={24}
+            style={styles.navIcon}
+          />
+          <Text>My Activities</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem}>
+          <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
+          <Text>More</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -131,8 +204,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     padding: 20,
   },
-  calculatorContainer: {
-  },
+  calculatorContainer: {},
   calculatorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -179,7 +251,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'flex-end',
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0'
+    borderTopColor: '#f0f0f0',
   },
   totalPointsText: {
     fontSize: 18,
