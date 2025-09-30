@@ -2,6 +2,9 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import LoginScreen from './src/screens/LoginScreen';
 import OtpScreen from './src/screens/OtpScreen';
 import SetupPinScreen from './src/screens/SetupPinScreen';
@@ -23,6 +26,8 @@ import OrderFilterScreen from './src/screens/OrderFilterScreen';
 import OrderDetailScreen from './src/screens/OrderDetailScreen';
 import AcknowledgementScreen from './src/screens/AcknowledgementScreen';
 import AcknowledgementSuccessScreen from './src/screens/AcknowledgementSuccessScreen';
+import MyActivitiesScreen from './src/screens/MyActivitiesScreen';
+import MoreScreen from './src/screens/MoreScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -38,6 +43,7 @@ export type RootStackParamList = {
   Login: undefined;
   Otp: { mobileNumber: string };
   SetupPin: undefined;
+  Main: undefined;
   Loyalty: undefined;
   AllRewards: undefined;
   PointsCalculator: undefined;
@@ -56,9 +62,45 @@ export type RootStackParamList = {
   OrderDetail: { orderId: string };
   Acknowledgement: { orderId: string };
   AcknowledgementSuccess: undefined;
+  MyActivities: undefined;
+  More: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
+
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarIcon: ({ color, size }) => {
+        let iconName = 'circle-outline';
+
+        if (route.name === 'Loyalty') {
+          iconName = 'trophy-outline';
+        } else if (route.name === 'Social') {
+          iconName = 'comment-text-multiple-outline';
+        } else if (route.name === 'Products') {
+          iconName = 'cube-outline';
+        } else if (route.name === 'MyActivities') {
+          iconName = 'format-list-bulleted';
+        } else if (route.name === 'More') {
+          iconName = 'dots-horizontal';
+        }
+
+        return <Icon name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: '#4CAF50',
+      tabBarInactiveTintColor: 'gray',
+    })}
+  >
+    <Tab.Screen name="Loyalty" component={LoyaltyScreen} />
+    <Tab.Screen name="Social" component={SocialScreen} />
+    <Tab.Screen name="Products" component={ProductsScreen} />
+    <Tab.Screen name="MyActivities" component={MyActivitiesScreen} options={{ title: 'My Activities'}} />
+    <Tab.Screen name="More" component={MoreScreen} />
+  </Tab.Navigator>
+);
 
 const App = () => {
   return (
@@ -68,14 +110,12 @@ const App = () => {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Otp" component={OtpScreen} />
           <Stack.Screen name="SetupPin" component={SetupPinScreen} />
-          <Stack.Screen name="Loyalty" component={LoyaltyScreen} />
+          <Stack.Screen name="Main" component={MainTabs} />
           <Stack.Screen name="AllRewards" component={AllRewardsScreen} />
           <Stack.Screen name="PointsCalculator" component={PointsCalculatorScreen} />
           <Stack.Screen name="RewardHistory" component={RewardHistoryScreen} />
-          <Stack.Screen name="Social" component={SocialScreen} />
           <Stack.Screen name="Comments" component={CommentScreen} />
           <Stack.Screen name="CreatePost" component={CreatePostScreen} />
-          <Stack.Screen name="Products" component={ProductsScreen} />
           <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
           <Stack.Screen name="Cart" component={CartScreen} />
           <Stack.Screen name="Checkout" component={CheckoutScreen} />

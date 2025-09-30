@@ -65,7 +65,7 @@ const SetupPinScreen: React.FC<Props> = ({ navigation }) => {
     if (isPinComplete && isConfirmPinComplete) {
       if (pin.join('') === confirmPin.join('')) {
         // PINs match, proceed with navigation
-        navigation.navigate('Loyalty');
+         navigation.navigate('Main');
       } else {
         alert('PINs do not match.');
       }
