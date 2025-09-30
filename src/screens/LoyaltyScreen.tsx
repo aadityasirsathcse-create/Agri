@@ -159,7 +159,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-      {/* Bottom Tab Navigator Placeholder */}
+      {/* Bottom Tab Navigator Placeholder
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={styles.navItem}
@@ -194,7 +194,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
           <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
           <Text>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

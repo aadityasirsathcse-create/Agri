@@ -15,9 +15,9 @@ type Props = {
 
 const MyActivitiesScreen: React.FC<Props> = ({ navigation }) => {
   const menuItems = [
-    { title: 'Manage Farmers', image: require('../assets/farmerm.png') },
-    { title: 'Manage Retailers', image: require('../assets/relator.png') },
-    { title: 'Update Distributor', image: require('../assets/distributor.png') },
+    { title: 'Manage Farmers', image: require('../assets/farmerm.png'), screen: 'ManageFarmers' },
+    { title: 'Manage Retailers', image: require('../assets/relator.png'), screen: 'ManageRetailers' },
+    { title: 'Update Distributor', image: require('../assets/distributor.png'), screen: 'UpdateDistributor' },
     { title: 'My Activities', image: require('../assets/mactivity.png') },
     { title: 'My Complaints', image: require('../assets/complain.png') },
     { title: 'My Expenses', image: require('../assets/expences.png') },
@@ -42,7 +42,11 @@ const MyActivitiesScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.menuGrid}>
           {menuItems.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.menuItem}>
+            <TouchableOpacity 
+              key={index} 
+              style={styles.menuItem}
+              onPress={() => item.screen && navigation.navigate(item.screen as any)}
+            >
               <Image source={item.image} style={styles.menuItemImage} />
               <Text style={styles.menuItemText}>{item.title}</Text>
             </TouchableOpacity>

@@ -185,7 +185,7 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         ))}
       </ScrollView>
-      <View style={styles.bottomNav}>
+      {/* <View style={styles.bottomNav}>
         <TouchableOpacity
           style={styles.navItem}
           onPress={() => navigation.navigate('Loyalty')}
@@ -219,7 +219,7 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
           <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
           <Text>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

@@ -114,7 +114,7 @@ const ProductsScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-       <View style={styles.bottomNav}>
+       {/* <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Loyalty')}>
             <Icon name="trophy-outline" size={24} style={styles.navIcon} />
             <Text>Loyalty</Text>
@@ -135,7 +135,7 @@ const ProductsScreen: React.FC<Props> = ({ navigation }) => {
             <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
             <Text>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

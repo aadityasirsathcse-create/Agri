@@ -28,6 +28,12 @@ import AcknowledgementScreen from './src/screens/AcknowledgementScreen';
 import AcknowledgementSuccessScreen from './src/screens/AcknowledgementSuccessScreen';
 import MyActivitiesScreen from './src/screens/MyActivitiesScreen';
 import MoreScreen from './src/screens/MoreScreen';
+import ManageFarmersScreen from './src/screens/ManageFarmersScreen';
+import ManageRetailersScreen from './src/screens/ManageRetailersScreen';
+import AddFarmerScreen from './src/screens/AddFarmerScreen';
+import AddRetailerScreen from './src/screens/AddRetailersScreen';
+import UpdateDistributorScreen from './src/screens/UpdateDistributorScreen';
+import UpdateDistributorDetailScreen from './src/screens/UpdateDistributorDetailScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -64,12 +70,18 @@ export type RootStackParamList = {
   AcknowledgementSuccess: undefined;
   MyActivities: undefined;
   More: undefined;
+  ManageFarmers: undefined;
+  ManageRetailers: undefined;
+  AddFarmer: undefined;
+  AddRetailer: undefined;
+  UpdateDistributor: undefined;
+  UpdateDistributorDetail: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator();
 
-const MainTabs = () => (
+export const MainTabs = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       headerShown: false,
@@ -107,6 +119,11 @@ const App = () => {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Loyalty" component={LoyaltyScreen} />
+          <Tab.Screen name="Social" component={SocialScreen} />
+          <Tab.Screen name="Products" component={ProductsScreen} />
+          <Tab.Screen name="MyActivities" component={MyActivitiesScreen} options={{ title: 'My Activities'}} />
+          <Tab.Screen name="More" component={MoreScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Otp" component={OtpScreen} />
           <Stack.Screen name="SetupPin" component={SetupPinScreen} />
@@ -126,6 +143,12 @@ const App = () => {
           <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
           <Stack.Screen name="Acknowledgement" component={AcknowledgementScreen} />
           <Stack.Screen name="AcknowledgementSuccess" component={AcknowledgementSuccessScreen} />
+          <Stack.Screen name="ManageFarmers" component={ManageFarmersScreen} />
+          <Stack.Screen name="ManageRetailers" component={ManageRetailersScreen} />
+          <Stack.Screen name="AddFarmer" component={AddFarmerScreen} />
+          <Stack.Screen name="AddRetailer" component={AddRetailerScreen} />
+          <Stack.Screen name="UpdateDistributor" component={UpdateDistributorScreen} />
+          <Stack.Screen name="UpdateDistributorDetail" component={UpdateDistributorDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

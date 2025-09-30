@@ -133,7 +133,7 @@ const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.totalPointsValue}>{totalPoints}</Text>
         </Text>
       </View>
-      <View style={styles.bottomNav}>
+      {/* <View style={styles.bottomNav}>
         <TouchableOpacity
           style={styles.navItem}
           onPress={() => navigation.navigate('Loyalty')}
@@ -155,7 +155,8 @@ const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
           <Icon name="store-outline" size={24} style={styles.navIcon} />
           <Text>Products</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} 
+        onPress={() => navigation.navigate('MyActivities')}>
           <Icon
             name="clipboard-text-outline"
             size={24}
@@ -167,7 +168,7 @@ const PointsCalculatorScreen: React.FC<Props> = ({ navigation }) => {
           <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
           <Text>More</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };
