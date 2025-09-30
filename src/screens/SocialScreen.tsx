@@ -106,7 +106,7 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
             <ImageBackground source={require('../assets/bg.png')} style={styles.bg}>
           <Text style={styles.startWritingTitle}>Hey</Text>
           <Text style={styles.startWritingSubtitle}>What's on your mind today?</Text>
-          <TouchableOpacity style={styles.startWritingButton}>
+           <TouchableOpacity style={styles.startWritingButton} onPress={() => navigation.navigate('CreatePost')}>
             <Text style={styles.startWritingButtonText}>Start Writing...</Text>
           </TouchableOpacity>
           </ImageBackground>
@@ -136,10 +136,11 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
                 <Icon name={post.liked ? "thumb-up" : "thumb-up-outline"} size={20} color={post.liked ? "#4CAF50" : "#666"} />
                 <Text style={[styles.actionText, { color: post.liked ? "#4CAF50" : "#666" }]}>{post.likes > 0 && post.likes}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <Icon name="comment-outline" size={20} color="#666" />
-                <Text style={styles.actionText}>{post.comments > 0 && post.comments}</Text>
-              </TouchableOpacity>
+              <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Comments', { post: post })}>
+    <Icon name="comment-outline" size={20} color="#666" />
+    <Text style={styles.actionText}>{post.comments > 0 && post.comments}</Text>
+</TouchableOpacity>
+
               <TouchableOpacity style={styles.actionButton}>
                 <Icon name="share-outline" size={20} color="#666" />
                 <Text style={styles.actionText}>{post.shares > 0 && post.shares}</Text>
