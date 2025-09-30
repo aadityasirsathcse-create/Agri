@@ -18,7 +18,7 @@ const MyActivitiesScreen: React.FC<Props> = ({ navigation }) => {
     { title: 'Manage Farmers', image: require('../assets/farmerm.png'), screen: 'ManageFarmers' },
     { title: 'Manage Retailers', image: require('../assets/relator.png'), screen: 'ManageRetailers' },
     { title: 'Update Distributor', image: require('../assets/distributor.png'), screen: 'UpdateDistributor' },
-    { title: 'My Activities', image: require('../assets/mactivity.png') },
+    { title: 'My Activities', image: require('../assets/mactivity.png'), screen: 'AddActivity' },
     { title: 'My Complaints', image: require('../assets/complain.png') },
     { title: 'My Expenses', image: require('../assets/expences.png') },
   ];
