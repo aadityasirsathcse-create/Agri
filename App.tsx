@@ -38,6 +38,8 @@ import AddActivityScreen from './src/screens/AddActivityScreen';
 import MyComplaintsScreen from './src/screens/MyComplaintsScreen';
 import RaiseComplaintScreen from './src/screens/RaiseComplaintScreen';
 import TicketDetailScreen from './src/screens/TicketDetailScreen';
+import MyExpensesScreen from './src/screens/MyExpensesScreen';
+import AddExpenseScreen from './src/screens/AddExpenseScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -84,6 +86,8 @@ export type RootStackParamList = {
   MyComplaints: undefined;
   RaiseComplaint: undefined;
   TicketDetail: undefined;
+  MyExpenses: undefined;
+  AddExpense: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -156,6 +160,8 @@ const App = () => {
           <Stack.Screen name="MyComplaints" component={MyComplaintsScreen} />
           <Stack.Screen name="RaiseComplaint" component={RaiseComplaintScreen} />
           <Stack.Screen name="TicketDetail" component={TicketDetailScreen} />
+          <Stack.Screen name="MyExpenses" component={MyExpensesScreen} />
+          <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
