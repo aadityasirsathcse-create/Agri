@@ -20,7 +20,6 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary, Asset } from 'react-native-image-picker';
-import DocumentPicker from 'react-native-document-picker';
 
 interface Post {
   author: string;
@@ -131,24 +130,24 @@ const CommentScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const handleChooseFile = async () => {
     try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf, DocumentPicker.types.plainText],
-      });
-      if (res && res.length > 0) {
-        const file = res[0];
-        const newAttachment: Attachment = {
-          uri: file.uri,
-          type: 'file',
-          name: file.name ?? 'file',
-        };
-        setAttachments((prev) => [...prev, newAttachment]);
-      }
+      // const res = await DocumentPicker.pick({
+      //   type: [DocumentPicker.types.pdf, DocumentPicker.types.plainText],
+      // });
+      // if (res && res.length > 0) {
+      //   const file = res[0];
+      //   const newAttachment: Attachment = {
+      //     uri: file.uri,
+      //     type: 'file',
+      //     name: file.name ?? 'file',
+      //   };
+      //   setAttachments((prev) => [...prev, newAttachment]);
+      // }
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled file picker');
-      } else {
-        console.error('FilePicker Error: ', err);
-      }
+      // if (DocumentPicker.isCancel(err)) {
+      //   console.log('User cancelled file picker');
+      // } else {
+      //   console.error('FilePicker Error: ', err);
+      // }
     }
   };
 

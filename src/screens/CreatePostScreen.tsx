@@ -14,7 +14,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary, Asset } from 'react-native-image-picker';
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+// import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 
 interface Attachment {
     uri: string;
@@ -54,25 +54,25 @@ const CreatePostScreen: React.FC<Props> = ({ navigation }) => {
         return;
     }
     try {
-      const results = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-        allowMultiSelection: true,
-      });
-      const newAttachments = results.map((res: DocumentPickerResponse): Attachment => ({
-        uri: res.uri,
-        type: 'pdf',
-        name: res.name ?? 'Untitled',
-      }));
-      if (attachments.length + newAttachments.length > 10) {
-        return;
-      }
-      setAttachments(prevAttachments => [...prevAttachments, ...newAttachments]);
+      // const results = await DocumentPicker.pick({
+      //   type: [DocumentPicker.types.pdf],
+      //   allowMultiSelection: true,
+      // });
+      // const newAttachments = results.map((res: DocumentPickerResponse): Attachment => ({
+      //   uri: res.uri,
+      //   type: 'pdf',
+      //   name: res.name ?? 'Untitled',
+      // }));
+      // if (attachments.length + newAttachments.length > 10) {
+      //   return;
+      // }
+      // setAttachments(prevAttachments => [...prevAttachments, ...newAttachments]);
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-      } else {
-        throw err;
-      }
+      // if (DocumentPicker.isCancel(err)) {
+      //   // User cancelled the picker
+      // } else {
+      //   throw err;
+      // }
     }
   };
 
