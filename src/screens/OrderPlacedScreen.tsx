@@ -25,7 +25,7 @@ const OrderPlacedScreen: React.FC<Props> = ({ navigation }) => {
         <TouchableOpacity style={styles.outlineButton} onPress={() => navigation.navigate('Products')}>
           <Text style={styles.outlineButtonText}>Go back</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.solidButton} onPress={() => { /* Navigate to Order Details */ }}>
+        <TouchableOpacity style={styles.solidButton}  onPress={() => navigation.navigate('OrdersHistory')}>
           <Text style={styles.solidButtonText}>View Order</Text>
         </TouchableOpacity>
       </View>

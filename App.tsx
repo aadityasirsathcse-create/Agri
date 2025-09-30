@@ -18,6 +18,11 @@ import CartScreen from './src/screens/CartScreen';
 import CheckoutScreen from './src/screens/CheckoutScreen';
 import PaymentProcessingScreen from './src/screens/PaymentProcessingScreen';
 import OrderPlacedScreen from './src/screens/OrderPlacedScreen';
+import OrdersHistoryScreen from './src/screens/OrdersHistoryScreen';
+import OrderFilterScreen from './src/screens/OrderFilterScreen';
+import OrderDetailScreen from './src/screens/OrderDetailScreen';
+import AcknowledgementScreen from './src/screens/AcknowledgementScreen';
+import AcknowledgementSuccessScreen from './src/screens/AcknowledgementSuccessScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -46,6 +51,11 @@ export type RootStackParamList = {
   Checkout: undefined;
   PaymentProcessing: undefined;
   OrderPlaced: undefined;
+  OrdersHistory: undefined;
+  OrderFilter: undefined;
+  OrderDetail: { orderId: string };
+  Acknowledgement: { orderId: string };
+  AcknowledgementSuccess: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -71,6 +81,11 @@ const App = () => {
           <Stack.Screen name="Checkout" component={CheckoutScreen} />
           <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
           <Stack.Screen name="OrderPlaced" component={OrderPlacedScreen} />
+          <Stack.Screen name="OrdersHistory" component={OrdersHistoryScreen} />
+          <Stack.Screen name="OrderFilter" component={OrderFilterScreen} />
+          <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
+          <Stack.Screen name="Acknowledgement" component={AcknowledgementScreen} />
+          <Stack.Screen name="AcknowledgementSuccess" component={AcknowledgementSuccessScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
