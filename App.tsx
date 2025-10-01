@@ -41,6 +41,12 @@ import TicketDetailScreen from './src/screens/TicketDetailScreen';
 import MyExpensesScreen from './src/screens/MyExpensesScreen';
 import AddExpenseScreen from './src/screens/AddExpenseScreen';
 import AnalyticsScreen from './src/screens/AnalyticsScreen';
+import CFSalesScreen from './src/screens/CFSalesScreen';
+import CFOrderDetailScreen from './src/screens/CFOrderDetailScreen';
+import CFReportProductScreen from './src/screens/CFReportProductScreen';
+import CFScanScreen from './src/screens/CFScanScreen';
+import CFSubmitOrderScreen from './src/screens/CFSubmitOrderScreen';
+import CFSuccessScreen from './src/screens/CFSuccessScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -90,6 +96,12 @@ export type RootStackParamList = {
   MyExpenses: undefined;
   AddExpense: undefined;
   Analytics: undefined;
+  CFSales: undefined;
+  CFOrderDetail: undefined;
+  CFReportProduct: undefined;
+  CFScan: undefined;
+  CFSubmitOrder: undefined;
+  CFSuccess: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -165,6 +177,12 @@ const App = () => {
           <Stack.Screen name="MyExpenses" component={MyExpensesScreen} />
           <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
           <Stack.Screen name="Analytics" component={AnalyticsScreen} />
+          <Stack.Screen name="CFSales" component={CFSalesScreen} />
+          <Stack.Screen name="CFOrderDetail" component={CFOrderDetailScreen} />
+          <Stack.Screen name="CFReportProduct" component={CFReportProductScreen} />
+          <Stack.Screen name="CFScan" component={CFScanScreen} />
+          <Stack.Screen name="CFSubmitOrder" component={CFSubmitOrderScreen} />
+          <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

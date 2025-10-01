@@ -35,6 +35,13 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
+    const handleQrOptionPress = (option: string) => {
+    setShowQrModal(false);
+    if (option === 'C&F Agent') {
+      navigation.navigate('CFSales');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -82,7 +89,7 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
                 <Icon name="close" size={24} color="#000" />
             </TouchableOpacity>
             {qrOptions.map((option, i) => (
-              <TouchableOpacity key={i} style={styles.dropdownItem}>
+                <TouchableOpacity key={i} style={styles.dropdownItem} onPress={() => handleQrOptionPress(option)}>
                 <Text style={styles.dropdownItemText}>{option}</Text>
               </TouchableOpacity>
             ))}
