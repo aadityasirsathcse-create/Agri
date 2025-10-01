@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -14,14 +14,27 @@ type Props = {
 };
 
 const MoreScreen: React.FC<Props> = ({ navigation }) => {
+  const [showQrModal, setShowQrModal] = useState(false);
+
   const menuItems = [
-    { title: 'Scan QR', image: require('../assets/qr.png') },
+    { title: 'Scan QR', image: require('../assets/qr.png'), id: 'scan-qr' },
     { title: 'My Orders', image: require('../assets/or.png'), notification: '24/7 Service', screen: 'OrdersHistory' },
     { title: 'Analytics', image: require('../assets/an.png'), screen: 'Analytics' },
     { title: 'Quiz / Survey', image: require('../assets/an.png'), notification: '2 Newly added' },
     { title: 'Crop Advisory', image: require('../assets/cr.png'), notification: '2 New advisory issued' },
     { title: 'Disease and Pest', image: require('../assets/pest.png'), notification: 'You are up-to date' },
   ];
+
+  const qrOptions = ['C&F Agent', 'Dealer', 'Retailer', 'Farmer'];
+
+  const handleMenuItemPress = (item: any) => {
+    if (item.id === 'scan-qr') {
+      setShowQrModal(true);
+    } else if (item.screen) {
+      navigation.navigate(item.screen as any);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -43,7 +56,7 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
             <TouchableOpacity 
               key={index} 
               style={styles.menuItem}
-              onPress={() => item.screen && navigation.navigate(item.screen as any)}
+              onPress={() => handleMenuItemPress(item)}
             >
                 {item.notification && 
                     <View style={styles.notificationBadge}>
@@ -56,6 +69,26 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showQrModal}
+        onRequestClose={() => setShowQrModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setShowQrModal(false)}>
+                <Icon name="close" size={24} color="#000" />
+            </TouchableOpacity>
+            {qrOptions.map((option, i) => (
+              <TouchableOpacity key={i} style={styles.dropdownItem}>
+                <Text style={styles.dropdownItemText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -131,6 +164,31 @@ const styles = StyleSheet.create({
   },
   notificationText: {
       fontSize: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    elevation: 5,
+  },
+  closeButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+  },
+  dropdownItem: {
+    paddingVertical: 15,
+    alignItems: 'center',
+  },
+  dropdownItemText: {
+      fontSize: 18,
   }
 });
 
