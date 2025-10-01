@@ -16,13 +16,12 @@ type Props = {
 const MoreScreen: React.FC<Props> = ({ navigation }) => {
   const menuItems = [
     { title: 'Scan QR', image: require('../assets/qr.png') },
-    { title: 'My Orders', image: require('../assets/or.png'), notification: '24/7 Service' },
-    { title: 'Analytics', image: require('../assets/an.png') },
+    { title: 'My Orders', image: require('../assets/or.png'), notification: '24/7 Service', screen: 'OrdersHistory' },
+    { title: 'Analytics', image: require('../assets/an.png'), screen: 'Analytics' },
     { title: 'Quiz / Survey', image: require('../assets/an.png'), notification: '2 Newly added' },
     { title: 'Crop Advisory', image: require('../assets/cr.png'), notification: '2 New advisory issued' },
     { title: 'Disease and Pest', image: require('../assets/pest.png'), notification: 'You are up-to date' },
   ];
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -44,7 +43,7 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
             <TouchableOpacity 
               key={index} 
               style={styles.menuItem}
-              onPress={() => {}}
+              onPress={() => item.screen && navigation.navigate(item.screen as any)}
             >
                 {item.notification && 
                     <View style={styles.notificationBadge}>

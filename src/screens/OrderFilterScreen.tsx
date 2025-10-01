@@ -49,7 +49,7 @@ const OrderFilterScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FEF9',
+    backgroundColor: '#e5f9e5ff',
   },
   header: {
     flexDirection: 'row',
