@@ -104,7 +104,7 @@ const SocialScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.userRole}>Sales & Marketing</Text>
           </View>
         </View>
-        <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
+        <Icon name="bell-outline" size={24} />
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.startWritingContainer}>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     paddingVertical: 40,
   },
   headerUser: {
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   userName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   userRole: {

@@ -35,14 +35,8 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.userRole}>Sales & Marketing</Text>
           </View>
           <View style={styles.headerIcons}>
-            <Image
-              source={require('../assets/search.png')}
-              style={styles.navIcon}
-            />
-            <Image
-              source={require('../assets/noti.png')}
-              style={styles.navIcon}
-            />
+            <Icon name="magnify" size={24} />
+            <Icon name="bell-outline" size={24} />
           </View>
         </View>
 
@@ -210,7 +204,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 40,
+    paddingHorizontal: 15,
+    paddingVertical: 40,
     backgroundColor: '#e5f9e5ff',
   },
   userImage: {
@@ -223,7 +218,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
   },
   userRole: {
     color: '#666',
@@ -231,6 +226,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     marginLeft: 'auto',
     flexDirection: 'row',
+    gap: 10,
   },
   rewardsSummary: {
     backgroundColor: '#FFFFFF',

@@ -45,6 +45,8 @@ import CFSalesScreen from './src/screens/CFSalesScreen';
 import CFOrderDetailScreen from './src/screens/CFOrderDetailScreen';
 import CFReportProductScreen from './src/screens/CFReportProductScreen';
 import CFScanScreen from './src/screens/CFScanScreen';
+import CFSubmitOrder from './src/screens/CFSubmitOrderScreen';
+import CFSuccess from './src/screens/CFSuccessScreen';
 import RetailerHomeScreen from './src/screens/RetailerHomeScreen';
 import RetailerScanScreen from './src/screens/RetailerScanScreen';
 import RetailerSubmitOrderScreen from './src/screens/RetailerSubmitOrder';
@@ -54,6 +56,7 @@ import DealerScanScreen from './src/screens/DealerScanScreen';
 import DealerQRDetailScreen from './src/screens/DealerQRDetailScreen';
 import DealerSuccessScreen from './src/screens/DealerSuccessScreen';
 import { SafeAreaView } from 'react-native';
+import CFSuccessScreen from './src/screens/CFSuccessScreen';
 
 interface Product {
   id: number;
@@ -106,6 +109,8 @@ export type RootStackParamList = {
   CFOrderDetail: undefined;
   CFReportProduct: undefined;
   CFScan: undefined;
+  CFSubmitOrder: undefined;
+  CFSuccess: undefined;
   RetailerHome: undefined;
   RetailerScan: undefined;
   RetailerSubmitOrder: undefined;
@@ -193,6 +198,8 @@ const App = () => {
           <Stack.Screen name="CFOrderDetail" component={CFOrderDetailScreen} />
           <Stack.Screen name="CFReportProduct" component={CFReportProductScreen} />
           <Stack.Screen name="CFScan" component={CFScanScreen} />
+          <Stack.Screen name="CFSubmitOrder" component={CFSubmitOrder} />
+          <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
           <Stack.Screen name="RetailerHome" component={RetailerHomeScreen} />
           <Stack.Screen name="RetailerScan" component={RetailerScanScreen} />
           <Stack.Screen name="RetailerSubmitOrder" component={RetailerSubmitOrderScreen} />

@@ -148,21 +148,21 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 40,
+    paddingHorizontal: 15,
+    paddingVertical: 40,
     backgroundColor: '#e5f9e5ff',
   },
   userImage: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 12,
+    marginRight: 10,
   },
   userName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
   },
   userRole: {
-    fontSize: 12,
     color: 'gray',
   },
   headerIcons: {
