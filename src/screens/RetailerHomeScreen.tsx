@@ -1,10 +1,18 @@
-
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-type RetailerHomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RetailerHome'>;
+type RetailerHomeScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'RetailerHome'
+>;
 
 type Props = {
   navigation: RetailerHomeScreenNavigationProp;
@@ -24,13 +32,15 @@ const RetailerHomeScreen: React.FC<Props> = ({ navigation }) => {
         {orders.map((orderId, index) => (
           <View key={index} style={styles.orderCard}>
             <Text style={styles.orderId}>Order #{orderId}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('RetailerSubmitOrder')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('RetailerSubmitOrder')}
+            >
               <Text style={styles.arrow}>→</Text>
             </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.scanButton}
         onPress={() => navigation.navigate('RetailerScan')}
       >
@@ -83,15 +93,15 @@ const styles = StyleSheet.create({
   },
   scanButton: {
     backgroundColor: '#4CAF50',
-    padding: 20,
     margin: 20,
-    borderRadius: 8,
+    padding: 15,
+    borderRadius: 5,
     alignItems: 'center',
   },
   scanButtonText: {
     color: '#fff',
-    fontSize: 18,
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

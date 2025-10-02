@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#4CAF50',
     paddingVertical: 15,
-    paddingHorizontal: 80,
+    paddingHorizontal: 60,
     borderRadius: 5,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
     fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
