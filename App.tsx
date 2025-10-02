@@ -47,6 +47,10 @@ import CFReportProductScreen from './src/screens/CFReportProductScreen';
 import CFScanScreen from './src/screens/CFScanScreen';
 import CFSubmitOrderScreen from './src/screens/CFSubmitOrderScreen';
 import CFSuccessScreen from './src/screens/CFSuccessScreen';
+import DealerInventoryScreen from './src/screens/DealerInventoryScreen';
+import DealerScanScreen from './src/screens/DealerScanScreen';
+import DealerQRDetailScreen from './src/screens/DealerQRDetailScreen';
+import DealerSuccessScreen from './src/screens/DealerSuccessScreen';
 import { SafeAreaView } from 'react-native';
 
 interface Product {
@@ -102,6 +106,10 @@ export type RootStackParamList = {
   CFScan: undefined;
   CFSubmitOrder: undefined;
   CFSuccess: undefined;
+  DealerInventory: undefined;
+  DealerScan: undefined;
+  DealerQRDetail: undefined;
+  DealerSuccess: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -183,6 +191,10 @@ const App = () => {
           <Stack.Screen name="CFScan" component={CFScanScreen} />
           <Stack.Screen name="CFSubmitOrder" component={CFSubmitOrderScreen} />
           <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
+          <Stack.Screen name="DealerInventory" component={DealerInventoryScreen} />
+          <Stack.Screen name="DealerScan" component={DealerScanScreen} />
+          <Stack.Screen name="DealerQRDetail" component={DealerQRDetailScreen} />
+          <Stack.Screen name="DealerSuccess" component={DealerSuccessScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

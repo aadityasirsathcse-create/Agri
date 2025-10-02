@@ -1,16 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 
-type CFScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;
+type DealerScanScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'DealerScan'
+>;
 
 type Props = {
-  navigation: CFScanScreenNavigationProp;
+  navigation: DealerScanScreenNavigationProp;
 };
 
-const CFScanScreen: React.FC<Props> = ({ navigation }) => {
+const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
   const [isScanning, setIsScanning] = useState(true);
   const cameraRef = useRef<Camera>(null);
 
@@ -21,7 +24,7 @@ const CFScanScreen: React.FC<Props> = ({ navigation }) => {
       Alert.alert('Scanned!', event.nativeEvent.codeStringValue, [
         { 
           text: 'OK', 
-          onPress: () => navigation.navigate('CFSubmitOrder') 
+          onPress: () => navigation.navigate('DealerQRDetail') 
         },
       ]);
     }
@@ -94,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CFScanScreen;
+export default DealerScanScreen;

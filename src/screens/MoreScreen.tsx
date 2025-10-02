@@ -39,6 +39,8 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
     setShowQrModal(false);
     if (option === 'C&F Agent') {
       navigation.navigate('CFSales');
+    }else if (option === 'Dealer') {
+      navigation.navigate('DealerInventory');
     }
   };
 
