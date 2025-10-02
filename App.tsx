@@ -45,8 +45,10 @@ import CFSalesScreen from './src/screens/CFSalesScreen';
 import CFOrderDetailScreen from './src/screens/CFOrderDetailScreen';
 import CFReportProductScreen from './src/screens/CFReportProductScreen';
 import CFScanScreen from './src/screens/CFScanScreen';
-import CFSubmitOrderScreen from './src/screens/CFSubmitOrderScreen';
-import CFSuccessScreen from './src/screens/CFSuccessScreen';
+import RetailerHomeScreen from './src/screens/RetailerHomeScreen';
+import RetailerScanScreen from './src/screens/RetailerScanScreen';
+import RetailerSubmitOrderScreen from './src/screens/RetailerSubmitOrder';
+import SuccessScreen from './src/screens/SuccessScreen';
 import DealerInventoryScreen from './src/screens/DealerInventoryScreen';
 import DealerScanScreen from './src/screens/DealerScanScreen';
 import DealerQRDetailScreen from './src/screens/DealerQRDetailScreen';
@@ -104,8 +106,10 @@ export type RootStackParamList = {
   CFOrderDetail: undefined;
   CFReportProduct: undefined;
   CFScan: undefined;
-  CFSubmitOrder: undefined;
-  CFSuccess: undefined;
+  RetailerHome: undefined;
+  RetailerScan: undefined;
+  RetailerSubmitOrder: undefined;
+  Success: undefined;
   DealerInventory: undefined;
   DealerScan: undefined;
   DealerQRDetail: undefined;
@@ -189,8 +193,10 @@ const App = () => {
           <Stack.Screen name="CFOrderDetail" component={CFOrderDetailScreen} />
           <Stack.Screen name="CFReportProduct" component={CFReportProductScreen} />
           <Stack.Screen name="CFScan" component={CFScanScreen} />
-          <Stack.Screen name="CFSubmitOrder" component={CFSubmitOrderScreen} />
-          <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
+          <Stack.Screen name="RetailerHome" component={RetailerHomeScreen} />
+          <Stack.Screen name="RetailerScan" component={RetailerScanScreen} />
+          <Stack.Screen name="RetailerSubmitOrder" component={RetailerSubmitOrderScreen} />
+          <Stack.Screen name="Success" component={SuccessScreen} />
           <Stack.Screen name="DealerInventory" component={DealerInventoryScreen} />
           <Stack.Screen name="DealerScan" component={DealerScanScreen} />
           <Stack.Screen name="DealerQRDetail" component={DealerQRDetailScreen} />

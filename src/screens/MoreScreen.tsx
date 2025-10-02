@@ -41,6 +41,10 @@ const MoreScreen: React.FC<Props> = ({ navigation }) => {
       navigation.navigate('CFSales');
     }else if (option === 'Dealer') {
       navigation.navigate('DealerInventory');
+    }else if (option === 'Retailer') {
+      navigation.navigate('RetailerHome');
+    }else if (option === 'Farmer') {
+      navigation.navigate('RetailerHome');
     }
   };
 
