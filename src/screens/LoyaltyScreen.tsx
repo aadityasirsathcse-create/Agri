@@ -124,7 +124,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               />
               <Text style={styles.rewardName}>Amazon gift card</Text>
               <Text style={styles.rewardValue}>Worth $5000*</Text>
-              <TouchableOpacity style={styles.claimButton}>
+              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
                 <Text style={styles.claimButtonText}>Claim</Text>
               </TouchableOpacity>
             </View>
@@ -135,7 +135,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               />
               <Text style={styles.rewardName}>Family trip to </Text>
               <Text style={styles.rewardValue}>Worth $5000*</Text>
-              <TouchableOpacity style={styles.claimButton}>
+              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
                 <Text style={styles.claimButtonText}>Claim</Text>
               </TouchableOpacity>
             </View>
@@ -146,7 +146,7 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               />
               <Text style={styles.rewardName}>Croma discount coupon</Text>
               <Text style={styles.rewardValue}>30% off. Up to 2,500</Text>
-              <TouchableOpacity style={styles.claimButton}>
+              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
                 <Text style={styles.claimButtonText}>Claim</Text>
               </TouchableOpacity>
             </View>

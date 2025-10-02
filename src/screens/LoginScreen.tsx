@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   StatusBar,
   SafeAreaView,
-  Image
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -34,39 +39,51 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
       <StatusBar barStyle="dark-content" backgroundColor="#E9F5E9" />
-      <View style={styles.upperContainer}>
-        <View style={styles.imagePlaceholder}>
-          <Image source={require('../assets/farmer.png')} style={styles.image} />
-        </View>
-        <Text style={styles.title}>Friendly to Nature</Text>
-        <View style={styles.dotsContainer}>
-          <View style={[styles.dot, styles.activeDot]} />
-          <View style={styles.dot} />
-          <View style={styles.dot} />
-        </View>
-      </View>
-      <View style={styles.lowerContainer}>
-        <Text style={styles.loginTitle}>Login to your account</Text>
-        <Text style={styles.inputLabel}>Mobile Number</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="10 digit mobile Number here..."
-          placeholderTextColor="#999"
-          keyboardType="phone-pad"
-          maxLength={10}
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-        <Text style={styles.termsText}>
-          By login lorem ipsum sit amet dolor{' '}
-          <Text style={styles.linkText}>terms & conditions</Text>
-        </Text>
-      </View>
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0} // adjust if you have a header
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={styles.upperContainer}>
+              <View style={styles.imagePlaceholder}>
+                <Image source={require('../assets/farmer.png')} style={styles.image} />
+              </View>
+              <Text style={styles.title}>Friendly to Nature</Text>
+              <View style={styles.dotsContainer}>
+                <View style={[styles.dot, styles.activeDot]} />
+                <View style={styles.dot} />
+                <View style={styles.dot} />
+              </View>
+            </View>
+
+            <View style={styles.lowerContainer}>
+              <Text style={styles.loginTitle}>Login to your account</Text>
+              <Text style={styles.inputLabel}>Mobile Number</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="10 digit mobile Number here..."
+                placeholderTextColor="#999"
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={mobileNumber}
+                onChangeText={setMobileNumber}
+              />
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Submit</Text>
+              </TouchableOpacity>
+              <Text style={styles.termsText}>
+                By login lorem ipsum sit amet dolor{' '}
+                <Text style={styles.linkText}>terms & conditions</Text>
+              </Text>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

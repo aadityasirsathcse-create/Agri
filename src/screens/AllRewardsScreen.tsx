@@ -192,16 +192,10 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
             <TouchableOpacity onPress={() => setShowConfirmation(false)}>
-              <Image
-                source={require('../assets/back.png')}
-                style={styles.backButton}
-              />
+              <Icon name="arrow-left" size={24} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Rewards</Text>
-            <Image
-              source={require('../assets/noti.png')}
-              style={styles.bellIcon}
-            />
+            <Icon name="bell-outline" size={24} />
           </View>
           <ScrollView style={styles.scrollView}>
             <View style={styles.confirmationContainer}>
@@ -353,13 +347,10 @@ const AllRewardsScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../assets/back.png')}
-            style={styles.backButton}
-          />
+          <Icon name="arrow-left" size={24} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Loyalty</Text>
-        <Image source={require('../assets/noti.png')} style={styles.bellIcon} />
+        <Icon name="bell-outline" size={24} />
       </View>
       <ScrollView style={styles.scrollView}>
         <View style={styles.rewardsContainer}>
