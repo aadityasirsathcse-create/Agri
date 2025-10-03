@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -14,22 +21,50 @@ type Props = {
 };
 
 const products = [
-  { id: '1', name: 'Product 1', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-  { id: '2', name: 'Product 2', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-  { id: '3', name: 'Product 3', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-  { id: '4', name: 'Product 4', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
+  {
+    id: '1',
+    name: 'Product 1',
+    batch: '003282919',
+    size: '1 Ltr.',
+    shippers: 5,
+    scanned: 0,
+  },
+  {
+    id: '2',
+    name: 'Product 2',
+    batch: '003282919',
+    size: '1 Ltr.',
+    shippers: 5,
+    scanned: 0,
+  },
+  {
+    id: '3',
+    name: 'Product 3',
+    batch: '003282919',
+    size: '1 Ltr.',
+    shippers: 5,
+    scanned: 0,
+  },
+  {
+    id: '4',
+    name: 'Product 4',
+    batch: '003282919',
+    size: '1 Ltr.',
+    shippers: 5,
+    scanned: 0,
+  },
 ];
 
 const CFOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Icon name="arrow-left" size={24} />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Order details</Text>
-            <Icon name="bell-outline" size={24} />
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-left" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Order details</Text>
+        <Icon name="bell-outline" size={24} />
+      </View>
       <ScrollView style={styles.content}>
         <View style={styles.orderDetailsContainer}>
           <Text style={styles.orderId}>Order #IE0039UE83</Text>
@@ -42,102 +77,112 @@ const CFOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <Text style={styles.productsTitle}>Products details</Text>
-        {products.map(product => (
-          <View key={product.id} style={styles.productCard}>
-            <Text style={styles.productName}>{product.name}</Text>
-            <View style={styles.productDetails}>
-                <Text style={styles.productInfo}>Batch No. {product.batch}</Text>
+        <View style={{ marginBottom: 21 }}>
+          {products.map(product => (
+            <View key={product.id} style={styles.productCard}>
+              <Text style={styles.productName}>{product.name}</Text>
+              <View style={styles.productDetails}>
+                <Text style={styles.productInfo}>
+                  Batch No. {product.batch}
+                </Text>
                 <Text style={styles.productInfo}>Pack Size {product.size}</Text>
-                <Text style={styles.productInfo}>No. of shipper/Bag {product.shippers}</Text>
+                <Text style={styles.productInfo}>
+                  No. of shipper/Bag {product.shippers}
+                </Text>
+              </View>
+              <View style={styles.scanDetails}>
+                <Text>
+                  {product.scanned}/{product.shippers} scanned
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('CFReportProduct')}
+                >
+                  <Text style={styles.reportSaleLink}>Report Sale</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.scanDetails}>
-              <Text>{product.scanned}/{product.shippers} scanned</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('CFReportProduct')}>
-                <Text style={styles.reportSaleLink}>Report Sale</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#e5f9e5ff',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 40,
-        backgroundColor: '#fff',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    content: {
-        padding: 20,
-    },
-    orderDetailsContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 15,
-        marginBottom: 20,
-    },
-    orderId: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    customerInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 15,
-    },
-    customerText: {
-        color: 'gray',
-    },
-    productsTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 15,
-    },
-    productCard: {
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 15,
-        marginBottom: 15,
-    },
-    productName: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    productDetails: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 15,
-    },
-    productInfo: {
-        color: 'gray',
-    },
-    scanDetails: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderTopWidth: 1,
-        borderTopColor: '#eee',
-        paddingTop: 10,
-    },
-    reportSaleLink: {
-        color: '#4CAF50',
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#e5f9e5ff',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 40,
+    backgroundColor: '#fff',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  content: {
+    padding: 20,
+  },
+  orderDetailsContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+  },
+  orderId: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  customerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+    flexWrap: 'wrap',
+  },
+  customerText: {
+    color: 'gray',
+  },
+  productsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  productCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  productName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  productDetails: {
+    marginBottom: 15,
+  },
+  productInfo: {
+    color: 'gray',
+    marginBottom: 5,
+  },
+  scanDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    paddingTop: 10,
+  },
+  reportSaleLink: {
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
 });
 
 export default CFOrderDetailScreen;

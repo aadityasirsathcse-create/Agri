@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -16,10 +16,10 @@ type Props = {
 const CFSuccessScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Icon name="check-circle" size={100} color="#4CAF50" />
+      <Image source={require('../assets/success.png')}/>
       <Text style={styles.title}>Sales report updated</Text>
       <Text style={styles.message}>Sales report successfully updated for the order number IE0039UE83.</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.pop(6)}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.pop(5)}>
         <Text style={styles.buttonText}>Okay</Text>
       </TouchableOpacity>
     </SafeAreaView>
