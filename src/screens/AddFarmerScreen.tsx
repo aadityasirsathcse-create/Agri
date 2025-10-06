@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderColor: '#eee',
+    color:'black',
   },
   dateInputContainer: {
     flexDirection: 'row',
@@ -201,6 +202,7 @@ const styles = StyleSheet.create({
   },
   dateInput: {
     flex: 1,
+    color:'black',
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -222,6 +224,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 10,
+    color:'black',
   },
   retailerCard: {
     backgroundColor: '#fff',
