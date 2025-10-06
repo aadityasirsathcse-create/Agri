@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
+import QRScanner from '../plugins/qr-tracker/QRScanner';
 
 type CFScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;
 type CFScanScreenRouteProp = RouteProp<RootStackParamList, 'CFScan'>;
@@ -15,7 +16,6 @@ type Props = {
 
 const CFScanScreen: React.FC<Props> = ({ navigation, route }) => {
   const { product } = route.params;
-  const cameraRef = useRef<Camera>(null);
 
   const onReadCode = (event: { nativeEvent: { codeStringValue: string } }) => {
     if (event?.nativeEvent?.codeStringValue) {
@@ -33,18 +33,7 @@ const CFScanScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.cameraContainer}>
-          <Camera
-            ref={cameraRef}
-            cameraType={CameraType.Back}
-            scanBarcode={true}
-            showFrame={true}
-            laserColor="red"
-            frameColor="white"
-            onReadCode={onReadCode}
-            style={styles.camera}
-          />
-        </View>
+      <QRScanner onReadCode={onReadCode} />
     </View>
   );
 };
@@ -52,12 +41,6 @@ const CFScanScreen: React.FC<Props> = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: { 
     flex: 1 
-  },
-  cameraContainer: {
-    flex: 1,
-  },
-  camera: {
-    flex: 1,
   },
 });
 
