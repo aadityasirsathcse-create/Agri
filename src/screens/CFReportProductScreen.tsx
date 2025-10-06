@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Scro
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList, CFProduct } from '../../App';
 
 type CFReportProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,9 +18,10 @@ type CFReportProductScreenRouteProp = RouteProp<
 type Props = {
   navigation: CFReportProductScreenNavigationProp;
   route: CFReportProductScreenRouteProp;
+  onUpdateProduct: (product: CFProduct) => void;
 };
 
-const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
+const CFReportProductScreen: React.FC<Props> = ({ navigation, route, onUpdateProduct }) => {
   const productDetailsRef = useRef(route.params.product);
   const [barcode, setBarcode] = useState('');
   const [scannedCount, setScannedCount] = useState(route.params.product.scanned);
@@ -39,11 +40,19 @@ const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
   const isComplete = scannedCount === productDetailsRef.current.shippers;
   const progress = productDetailsRef.current.shippers > 0 ? (scannedCount / productDetailsRef.current.shippers) * 100 : 0;
 
-  const handleConfirm = () => {
-    if (isComplete) {
-      navigation.navigate('CFSubmitOrder');
-    }
-  };
+const handleConfirm = () => {
+  if (isComplete) {
+    const updatedProduct = { 
+      ...productDetailsRef.current, 
+      scanned: scannedCount 
+    };
+
+    onUpdateProduct(updatedProduct);
+
+    navigation.navigate('CFOrderDetail', { product: updatedProduct });
+  }
+};
+
 
   const handleScan = () => {
     const updatedProduct = { ...productDetailsRef.current, scanned: scannedCount };

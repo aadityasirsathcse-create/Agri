@@ -1,6 +1,6 @@
 
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -46,7 +46,6 @@ import CFSalesScreen from './src/screens/CFSalesScreen';
 import CFOrderDetailScreen from './src/screens/CFOrderDetailScreen';
 import CFReportProductScreen from './src/screens/CFReportProductScreen';
 import CFScanScreen from './src/screens/CFScanScreen';
-import CFSubmitOrder from './src/screens/CFSubmitOrderScreen';
 import CFSuccess from './src/screens/CFSuccessScreen';
 import RetailerHomeScreen from './src/screens/RetailerHomeScreen';
 import RetailerScanScreen from './src/screens/RetailerScanScreen';
@@ -68,7 +67,7 @@ interface Product {
   sizes: string[];
 }
 
-interface CFProduct {
+export interface CFProduct {
     id: string;
     name: string;
     batch: string;
@@ -116,10 +115,9 @@ export type RootStackParamList = {
   AddExpense: undefined;
   Analytics: undefined;
   CFSales: undefined;
-  CFOrderDetail: undefined;
+  CFOrderDetail: { product?: CFProduct };
   CFReportProduct: { product: CFProduct; scannedBarcode?: string; timestamp?: number };
   CFScan: { product: CFProduct };
-  CFSubmitOrder: undefined;
   CFSuccess: undefined;
   RetailerHome: undefined;
   RetailerScan: undefined;
@@ -168,6 +166,19 @@ const MainTabs = () => (
 );
 
 const App = () => {
+    const [products, setProducts] = useState([
+        { id: '1', name: 'Product 1', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
+        { id: '2', name: 'Product 2', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
+        { id: '3', name: 'Product 3', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
+        { id: '4', name: 'Product 4', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
+    ]);
+
+    const handleUpdateProduct = (updatedProduct: CFProduct) => {
+        setProducts(prevProducts =>
+          prevProducts.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
+        );
+    };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
       <NavigationContainer>
@@ -205,10 +216,13 @@ const App = () => {
           <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
           <Stack.Screen name="Analytics" component={AnalyticsScreen} />
           <Stack.Screen name="CFSales" component={CFSalesScreen} />
-          <Stack.Screen name="CFOrderDetail" component={CFOrderDetailScreen} />
-          <Stack.Screen name="CFReportProduct" component={CFReportProductScreen} />
+          <Stack.Screen name="CFOrderDetail">
+            {props => <CFOrderDetailScreen {...props} products={products} />}
+            </Stack.Screen>
+          <Stack.Screen name="CFReportProduct">
+            {props => <CFReportProductScreen {...props} onUpdateProduct={handleUpdateProduct} />}
+            </Stack.Screen>
           <Stack.Screen name="CFScan" component={CFScanScreen} />
-          <Stack.Screen name="CFSubmitOrder" component={CFSubmitOrder} />
           <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
           <Stack.Screen name="RetailerHome" component={RetailerHomeScreen} />
           <Stack.Screen name="RetailerScan" component={RetailerScanScreen} />

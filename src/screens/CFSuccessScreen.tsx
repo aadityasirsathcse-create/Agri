@@ -19,7 +19,12 @@ const CFSuccessScreen: React.FC<Props> = ({ navigation }) => {
       <Image source={require('../assets/success.png')}/>
       <Text style={styles.title}>Sales report updated</Text>
       <Text style={styles.message}>Sales report successfully updated for the order number IE0039UE83.</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.pop(5)}>
+      <TouchableOpacity style={styles.button} onPress={() =>
+    navigation.reset({
+      index: 4,
+      routes: [{ name: 'CFSales' }], // 👈 this will be the only screen
+    })
+  }>
         <Text style={styles.buttonText}>Okay</Text>
       </TouchableOpacity>
     </SafeAreaView>
