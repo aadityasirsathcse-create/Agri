@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -21,10 +21,34 @@ type Props = {
 };
 
 const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { product } = route.params;
+  const productDetailsRef = useRef(route.params.product);
   const [barcode, setBarcode] = useState('');
+  const [scannedCount, setScannedCount] = useState(route.params.product.scanned);
 
-  const progress = product.shippers > 0 ? (product.scanned / product.shippers) * 100 : 0;
+  useEffect(() => {
+    if (route.params?.scannedBarcode) {
+        setScannedCount(prevCount => {
+            if (prevCount < productDetailsRef.current.shippers) {
+                return prevCount + 1;
+            }
+            return prevCount;
+        });
+    }
+  }, [route.params?.scannedBarcode, route.params?.timestamp]);
+
+  const isComplete = scannedCount === productDetailsRef.current.shippers;
+  const progress = productDetailsRef.current.shippers > 0 ? (scannedCount / productDetailsRef.current.shippers) * 100 : 0;
+
+  const handleConfirm = () => {
+    if (isComplete) {
+      navigation.navigate('CFSubmitOrder');
+    }
+  };
+
+  const handleScan = () => {
+    const updatedProduct = { ...productDetailsRef.current, scanned: scannedCount };
+    navigation.navigate('CFScan', { product: updatedProduct });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,18 +64,18 @@ const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
         
         <View style={styles.progressContainer}>
           <Text>Item scanned</Text>
-          <Text>{product.scanned}/{product.shippers}</Text>
+          <Text>{scannedCount}/{productDetailsRef.current.shippers}</Text>
         </View>
         <View style={styles.progressBar}>
           <View style={[styles.progress, { width: `${progress}%` }]} />
         </View>
 
         <View style={styles.productCard}>
-            <Text style={styles.productName}>{product.name}</Text>
+            <Text style={styles.productName}>{productDetailsRef.current.name}</Text>
             <View style={styles.productDetails}>
-                <Text style={styles.productInfo}>Batch No. {product.batch}</Text>
-                <Text style={styles.productInfo}>Pack Size {product.size}</Text>
-                <Text style={styles.productInfo}>No. of shipper/Bag {product.shippers}</Text>
+                <Text style={styles.productInfo}>Batch No. {productDetailsRef.current.batch}</Text>
+                <Text style={styles.productInfo}>Pack Size {productDetailsRef.current.size}</Text>
+                <Text style={styles.productInfo}>No. of shipper/Bag {productDetailsRef.current.shippers}</Text>
             </View>
         </View>
 
@@ -64,14 +88,18 @@ const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
 
         <Text style={styles.orText}>(OR)</Text>
 
-        <TouchableOpacity style={styles.scanButton} onPress={() => navigation.navigate('CFScan')}>
+        <TouchableOpacity style={styles.scanButton} onPress={handleScan}>
           <Icon name="camera-outline" size={40} color="#4CAF50" />
           <Text style={styles.scanText}>Scan using Camera</Text>
         </TouchableOpacity>
 
         
       </ScrollView>
-      <TouchableOpacity style={styles.confirmButton} onPress={() => navigation.navigate('CFSubmitOrder')}>
+      <TouchableOpacity 
+        style={[styles.confirmButton, !isComplete && styles.disabledButton]}
+        onPress={handleConfirm}
+        disabled={!isComplete}
+      >
           <Text style={styles.confirmButtonText}>Confirm</Text>
         </TouchableOpacity>
     </SafeAreaView>
@@ -170,6 +198,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    disabledButton: {
+        backgroundColor: '#A5D6A7',
     },
 });
 

@@ -1,3 +1,4 @@
+
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -116,8 +117,8 @@ export type RootStackParamList = {
   Analytics: undefined;
   CFSales: undefined;
   CFOrderDetail: undefined;
-  CFReportProduct: { product: CFProduct };
-  CFScan: undefined;
+  CFReportProduct: { product: CFProduct; scannedBarcode?: string; timestamp?: number };
+  CFScan: { product: CFProduct };
   CFSubmitOrder: undefined;
   CFSuccess: undefined;
   RetailerHome: undefined;
