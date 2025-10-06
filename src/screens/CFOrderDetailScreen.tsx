@@ -18,6 +18,7 @@ type Props = {
 const CFOrderDetailScreen: React.FC<Props> = ({ navigation, products }) => {
 
   const allScanned = products.every(p => p.scanned === p.shippers);
+  console.log(products);
 
   return (
     <SafeAreaView style={styles.container}>

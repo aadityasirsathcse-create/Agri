@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CommonActions } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
 type CFSuccessScreenNavigationProp = StackNavigationProp<
@@ -19,14 +20,29 @@ const CFSuccessScreen: React.FC<Props> = ({ navigation }) => {
       <Image source={require('../assets/success.png')}/>
       <Text style={styles.title}>Sales report updated</Text>
       <Text style={styles.message}>Sales report successfully updated for the order number IE0039UE83.</Text>
-      <TouchableOpacity style={styles.button} onPress={() =>
-    navigation.reset({
-      index: 4,
-      routes: [{ name: 'CFSales' }], // 👈 this will be the only screen
-    })
-  }>
-        <Text style={styles.buttonText}>Okay</Text>
-      </TouchableOpacity>
+      <TouchableOpacity
+  style={styles.button}
+  onPress={() => {
+    const state = navigation.getState();
+    const firstFive = state.routes.slice(0, 4);
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: firstFive.length, 
+        routes: [
+          ...firstFive.map(r => ({
+            name: r.name as keyof RootStackParamList,
+            params: r.params,
+          })),
+          { name: 'CFSales' as keyof RootStackParamList },
+        ],
+      })
+    );
+  }}
+>
+  <Text style={styles.buttonText}>Okay</Text>
+</TouchableOpacity>
+
     </SafeAreaView>
   );
 };
