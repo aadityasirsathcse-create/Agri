@@ -1,10 +1,12 @@
 
 import 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Provider } from 'react-redux';
+import store from './src/store';
 
 import LoginScreen from './src/screens/LoginScreen';
 import OtpScreen from './src/screens/OtpScreen';
@@ -42,11 +44,6 @@ import TicketDetailScreen from './src/screens/TicketDetailScreen';
 import MyExpensesScreen from './src/screens/MyExpensesScreen';
 import AddExpenseScreen from './src/screens/AddExpenseScreen';
 import AnalyticsScreen from './src/screens/AnalyticsScreen';
-import CFSalesScreen from './src/screens/CFSalesScreen';
-import CFOrderDetailScreen from './src/screens/CFOrderDetailScreen';
-import CFReportProductScreen from './src/screens/CFReportProductScreen';
-import CFScanScreen from './src/screens/CFScanScreen';
-import CFSuccess from './src/screens/CFSuccessScreen';
 import RetailerHomeScreen from './src/screens/RetailerHomeScreen';
 import RetailerScanScreen from './src/screens/RetailerScanScreen';
 import RetailerSubmitOrderScreen from './src/screens/RetailerSubmitOrder';
@@ -56,7 +53,11 @@ import DealerScanScreen from './src/screens/DealerScanScreen';
 import DealerQRDetailScreen from './src/screens/DealerQRDetailScreen';
 import DealerSuccessScreen from './src/screens/DealerSuccessScreen';
 import { SafeAreaView } from 'react-native';
-import CFSuccessScreen from './src/screens/CFSuccessScreen';
+import QRTrackerSalesScreen from './src/plugins/qr-tracker/screens/QRTrackerSalesScreen';
+import QRTrackerOrderDetailScreen from './src/plugins/qr-tracker/screens/QRTrackerOrderDetailScreen';
+import QRTrackerReportProductScreen from './src/plugins/qr-tracker/screens/QRTrackerReportProductScreen';
+import QRTrackerScanScreen from './src/plugins/qr-tracker/screens/QRTrackerScanScreen';
+import QRTrackerSuccessScreen from './src/plugins/qr-tracker/screens/QRTrackerSuccessScreen';
 
 interface Product {
   id: number;
@@ -166,75 +167,60 @@ const MainTabs = () => (
 );
 
 const App = () => {
-    const [products, setProducts] = useState([
-        { id: '1', name: 'Product 1', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-        { id: '2', name: 'Product 2', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-        { id: '3', name: 'Product 3', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-        { id: '4', name: 'Product 4', batch: '003282919', size: '1 Ltr.', shippers: 5, scanned: 0 },
-    ]);
-
-    const handleUpdateProduct = (updatedProduct: CFProduct) => {
-        setProducts(prevProducts =>
-          prevProducts.map(p => (p.id === updatedProduct.id ? updatedProduct : p))
-        );
-    };
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Otp" component={OtpScreen} />
-          <Stack.Screen name="SetupPin" component={SetupPinScreen} />
-          <Stack.Screen name="Main" component={MainTabs} />
-          <Stack.Screen name="AllRewards" component={AllRewardsScreen} />
-          <Stack.Screen name="PointsCalculator" component={PointsCalculatorScreen} />
-          <Stack.Screen name="RewardHistory" component={RewardHistoryScreen} />
-          <Stack.Screen name="Comments" component={CommentScreen} />
-          <Stack.Screen name="CreatePost" component={CreatePostScreen} />
-          <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
-          <Stack.Screen name="Cart" component={CartScreen} />
-          <Stack.Screen name="Checkout" component={CheckoutScreen} />
-          <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
-          <Stack.Screen name="OrderPlaced" component={OrderPlacedScreen} />
-          <Stack.Screen name="OrdersHistory" component={OrdersHistoryScreen} />
-          <Stack.Screen name="OrderFilter" component={OrderFilterScreen} />
-          <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
-          <Stack.Screen name="Acknowledgement" component={AcknowledgementScreen} />
-          <Stack.Screen name="AcknowledgementSuccess" component={AcknowledgementSuccessScreen} />
-          <Stack.Screen name="ManageFarmers" component={ManageFarmersScreen} />
-          <Stack.Screen name="ManageRetailers" component={ManageRetailersScreen} />
-          <Stack.Screen name="AddFarmer" component={AddFarmerScreen} />
-          <Stack.Screen name="AddRetailer" component={AddRetailerScreen} />
-          <Stack.Screen name="UpdateDistributor" component={UpdateDistributorScreen} />
-          <Stack.Screen name="UpdateDistributorDetail" component={UpdateDistributorDetailScreen} />
-          <Stack.Screen name="AddActivity" component={AddActivityScreen} />
-          <Stack.Screen name="MyComplaints" component={MyComplaintsScreen} />
-          <Stack.Screen name="RaiseComplaint" component={RaiseComplaintScreen} />
-          <Stack.Screen name="TicketDetail" component={TicketDetailScreen} />
-          <Stack.Screen name="MyExpenses" component={MyExpensesScreen} />
-          <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
-          <Stack.Screen name="Analytics" component={AnalyticsScreen} />
-          <Stack.Screen name="CFSales" component={CFSalesScreen} />
-          <Stack.Screen name="CFOrderDetail">
-            {props => <CFOrderDetailScreen {...props} products={products} />}
-            </Stack.Screen>
-          <Stack.Screen name="CFReportProduct">
-            {props => <CFReportProductScreen {...props} onUpdateProduct={handleUpdateProduct} />}
-            </Stack.Screen>
-          <Stack.Screen name="CFScan" component={CFScanScreen} />
-          <Stack.Screen name="CFSuccess" component={CFSuccessScreen} />
-          <Stack.Screen name="RetailerHome" component={RetailerHomeScreen} />
-          <Stack.Screen name="RetailerScan" component={RetailerScanScreen} />
-          <Stack.Screen name="RetailerSubmitOrder" component={RetailerSubmitOrderScreen} />
-          <Stack.Screen name="Success" component={SuccessScreen} />
-          <Stack.Screen name="DealerInventory" component={DealerInventoryScreen} />
-          <Stack.Screen name="DealerScan" component={DealerScanScreen} />
-          <Stack.Screen name="DealerQRDetail" component={DealerQRDetailScreen} />
-          <Stack.Screen name="DealerSuccess" component={DealerSuccessScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Otp" component={OtpScreen} />
+            <Stack.Screen name="SetupPin" component={SetupPinScreen} />
+            <Stack.Screen name="Main" component={MainTabs} />
+            <Stack.Screen name="AllRewards" component={AllRewardsScreen} />
+            <Stack.Screen name="PointsCalculator" component={PointsCalculatorScreen} />
+            <Stack.Screen name="RewardHistory" component={RewardHistoryScreen} />
+            <Stack.Screen name="Comments" component={CommentScreen} />
+            <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+            <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
+            <Stack.Screen name="Cart" component={CartScreen} />
+            <Stack.Screen name="Checkout" component={CheckoutScreen} />
+            <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
+            <Stack.Screen name="OrderPlaced" component={OrderPlacedScreen} />
+            <Stack.Screen name="OrdersHistory" component={OrdersHistoryScreen} />
+            <Stack.Screen name="OrderFilter" component={OrderFilterScreen} />
+            <Stack.Screen name="OrderDetail" component={OrderDetailScreen} />
+            <Stack.Screen name="Acknowledgement" component={AcknowledgementScreen} />
+            <Stack.Screen name="AcknowledgementSuccess" component={AcknowledgementSuccessScreen} />
+            <Stack.Screen name="ManageFarmers" component={ManageFarmersScreen} />
+            <Stack.Screen name="ManageRetailers" component={ManageRetailersScreen} />
+            <Stack.Screen name="AddFarmer" component={AddFarmerScreen} />
+            <Stack.Screen name="AddRetailer" component={AddRetailerScreen} />
+            <Stack.Screen name="UpdateDistributor" component={UpdateDistributorScreen} />
+            <Stack.Screen name="UpdateDistributorDetail" component={UpdateDistributorDetailScreen} />
+            <Stack.Screen name="AddActivity" component={AddActivityScreen} />
+            <Stack.Screen name="MyComplaints" component={MyComplaintsScreen} />
+            <Stack.Screen name="RaiseComplaint" component={RaiseComplaintScreen} />
+            <Stack.Screen name="TicketDetail" component={TicketDetailScreen} />
+            <Stack.Screen name="MyExpenses" component={MyExpensesScreen} />
+            <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
+            <Stack.Screen name="Analytics" component={AnalyticsScreen} />
+            <Stack.Screen name="CFSales" component={QRTrackerSalesScreen} />
+            <Stack.Screen name="CFOrderDetail" component={QRTrackerOrderDetailScreen} />
+            <Stack.Screen name="CFReportProduct" component={QRTrackerReportProductScreen} />
+            <Stack.Screen name="CFScan" component={QRTrackerScanScreen} />
+            <Stack.Screen name="CFSuccess" component={QRTrackerSuccessScreen} />
+            <Stack.Screen name="RetailerHome" component={RetailerHomeScreen} />
+            <Stack.Screen name="RetailerScan" component={RetailerScanScreen} />
+            <Stack.Screen name="RetailerSubmitOrder" component={RetailerSubmitOrderScreen} />
+            <Stack.Screen name="Success" component={SuccessScreen} />
+            <Stack.Screen name="DealerInventory" component={DealerInventoryScreen} />
+            <Stack.Screen name="DealerScan" component={DealerScanScreen} />
+            <Stack.Screen name="DealerQRDetail" component={DealerQRDetailScreen} />
+            <Stack.Screen name="DealerSuccess" component={DealerSuccessScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 };
 

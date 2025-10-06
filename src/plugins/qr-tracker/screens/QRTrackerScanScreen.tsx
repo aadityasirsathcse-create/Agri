@@ -3,18 +3,18 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../App';
-import QRScanner from '../plugins/qr-tracker/QRScanner';
+import { RootStackParamList } from '../../../../App'; // Adjust if needed
+import QRScanner from '../QRScanner';
 
-type CFScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;
-type CFScanScreenRouteProp = RouteProp<RootStackParamList, 'CFScan'>;
+type QRTrackerScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;
+type QRTrackerScanScreenRouteProp = RouteProp<RootStackParamList, 'CFScan'>;
 
 type Props = {
-  navigation: CFScanScreenNavigationProp;
-  route: CFScanScreenRouteProp;
+  navigation: QRTrackerScanScreenNavigationProp;
+  route: QRTrackerScanScreenRouteProp;
 };
 
-const CFScanScreen: React.FC<Props> = ({ navigation, route }) => {
+const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
   const { product } = route.params;
 
   const onReadCode = (event: { nativeEvent: { codeStringValue: string } }) => {
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CFScanScreen;
+export default QRTrackerScanScreen;

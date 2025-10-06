@@ -1,25 +1,26 @@
+
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CommonActions } from '@react-navigation/native';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList } from '../../../../App';
+import { successScreenMessages } from '../constants/messages';
 
-type CFSuccessScreenNavigationProp = StackNavigationProp<
+type QRTrackerSuccessScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'CFSuccess'
 >;
 
 type Props = {
-  navigation: CFSuccessScreenNavigationProp;
+  navigation: QRTrackerSuccessScreenNavigationProp;
 };
 
-const CFSuccessScreen: React.FC<Props> = ({ navigation }) => {
+const QRTrackerSuccessScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../assets/success.png')}/>
-      <Text style={styles.title}>Sales report updated</Text>
-      <Text style={styles.message}>Sales report successfully updated for the order number IE0039UE83.</Text>
+      <Image source={require('../../../assets/success.png')}/>
+      <Text style={styles.title}>{successScreenMessages.title}</Text>
+      <Text style={styles.message}>{successScreenMessages.message}</Text>
       <TouchableOpacity
   style={styles.button}
   onPress={() => {
@@ -40,7 +41,7 @@ const CFSuccessScreen: React.FC<Props> = ({ navigation }) => {
     );
   }}
 >
-  <Text style={styles.buttonText}>Okay</Text>
+  <Text style={styles.buttonText}>{successScreenMessages.buttonText}</Text>
 </TouchableOpacity>
 
     </SafeAreaView>
@@ -81,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CFSuccessScreen;
+export default QRTrackerSuccessScreen;

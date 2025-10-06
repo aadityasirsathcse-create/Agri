@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
   View,
@@ -7,19 +8,23 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootStackParamList } from '../../../../App'; // Adjust if needed
+import { salesScreenMessages } from '../constants/messages';
+import SalesHeader from '../components/SalesHeader';
+import { reportSales } from '../actions/qrTrackerThunks';
+import { QrTrackerState } from '../reducers/qrTrackerReducer';
 
-type CFSalesScreenNavigationProp = StackNavigationProp<
+type QRTrackerSalesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'CFSales'
 >;
 
 type Props = {
-  navigation: CFSalesScreenNavigationProp;
+  navigation: QRTrackerSalesScreenNavigationProp;
 };
 
 const recentSearches = [
@@ -28,57 +33,39 @@ const recentSearches = [
   { id: '3', number: 'IE0039DN30', status: 'Completed' },
 ];
 
-const CFSalesScreen: React.FC<Props> = ({ navigation }) => {
+const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const [error, setError] = useState('');
+  const { salesError } = useSelector((state: { qrTracker: QrTrackerState }) => state.qrTracker);
 
   const handleReportSales = () => {
-    if (invoiceNumber.trim() === '') {
-      setError('Please enter a valid SAP code or invoice number');
-    } else {
-      setError('');
-      navigation.navigate('CFOrderDetail');
-    }
+    dispatch(reportSales(invoiceNumber, navigation));
   };
 
   return (
     <SafeAreaView style={styles.container}>
+      <SalesHeader />
       <ScrollView>
-        <View style={styles.header}>
-          <View style={styles.profileContainer}>
-            <Image
-              source={require('../assets/user.png')}
-              style={styles.profileImage}
-            />
-            <View>
-              <Text style={styles.profileName}>Harish Ramu</Text>
-              <Text style={styles.profileRole}>C&F</Text>
-            </View>
-          </View>
-          <Icon name="bell-outline" size={24} />
-        </View>
-
         <View style={styles.content}>
-          <Text style={styles.title}>
-            Enter an SAP code or invoice number to get started with reporting
-          </Text>
+          <Text style={styles.title}>{salesScreenMessages.title}</Text>
           <TextInput
             style={styles.input}
-            placeholder="Enter SAP code or invoice number"
+            placeholder={salesScreenMessages.placeholder}
             value={invoiceNumber}
             onChangeText={setInvoiceNumber}
           />
-          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          {salesError ? <Text style={styles.errorText}>{salesError}</Text> : null}
           <TouchableOpacity style={styles.button} onPress={handleReportSales}>
-            <Text style={styles.buttonText}>Report Sales</Text>
+            <Text style={styles.buttonText}>{salesScreenMessages.buttonText}</Text>
           </TouchableOpacity>
 
-          <Text style={styles.recentSearchesTitle}>Recent Searches</Text>
+          <Text style={styles.recentSearchesTitle}>{salesScreenMessages.recentSearchesTitle}</Text>
           {recentSearches.map(item => (
             <TouchableOpacity
+              key={item.id}
               onPress={() => navigation.navigate('CFOrderDetail')}
             >
-              <View key={item.id} style={styles.recentSearchItem}>
+              <View style={styles.recentSearchItem}>
                 <View>
                   <Text
                     style={[
@@ -106,29 +93,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#e5f9e5ff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 15,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  profileName: {
-    fontWeight: 'bold',
-  },
-  profileRole: {
-    color: 'gray',
   },
   content: {
     padding: 20,
@@ -195,4 +159,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CFSalesScreen;
+export default QRTrackerSalesScreen;
