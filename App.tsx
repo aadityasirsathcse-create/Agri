@@ -67,6 +67,15 @@ interface Product {
   sizes: string[];
 }
 
+interface CFProduct {
+    id: string;
+    name: string;
+    batch: string;
+    size: string;
+    shippers: number;
+    scanned: number;
+  }
+
 export type RootStackParamList = {
   Login: undefined;
   Otp: { mobileNumber: string };
@@ -107,7 +116,7 @@ export type RootStackParamList = {
   Analytics: undefined;
   CFSales: undefined;
   CFOrderDetail: undefined;
-  CFReportProduct: undefined;
+  CFReportProduct: { product: CFProduct };
   CFScan: undefined;
   CFSubmitOrder: undefined;
   CFSuccess: undefined;

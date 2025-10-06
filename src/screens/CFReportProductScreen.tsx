@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
 type CFReportProductScreenNavigationProp = StackNavigationProp<
@@ -9,12 +10,21 @@ type CFReportProductScreenNavigationProp = StackNavigationProp<
   'CFReportProduct'
 >;
 
+type CFReportProductScreenRouteProp = RouteProp<
+    RootStackParamList,
+    'CFReportProduct'
+  >;
+
 type Props = {
   navigation: CFReportProductScreenNavigationProp;
+  route: CFReportProductScreenRouteProp;
 };
 
-const CFReportProductScreen: React.FC<Props> = ({ navigation }) => {
+const CFReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { product } = route.params;
   const [barcode, setBarcode] = useState('');
+
+  const progress = product.shippers > 0 ? (product.scanned / product.shippers) * 100 : 0;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -30,18 +40,18 @@ const CFReportProductScreen: React.FC<Props> = ({ navigation }) => {
         
         <View style={styles.progressContainer}>
           <Text>Item scanned</Text>
-          <Text>2/5</Text>
+          <Text>{product.scanned}/{product.shippers}</Text>
         </View>
         <View style={styles.progressBar}>
-          <View style={styles.progress} />
+          <View style={[styles.progress, { width: `${progress}%` }]} />
         </View>
 
         <View style={styles.productCard}>
-            <Text style={styles.productName}>Product 1</Text>
+            <Text style={styles.productName}>{product.name}</Text>
             <View style={styles.productDetails}>
-                <Text style={styles.productInfo}>Batch No. 003282919</Text>
-                <Text style={styles.productInfo}>Pack Size 1 Ltr.</Text>
-                <Text style={styles.productInfo}>No. of shipper/Bag 5</Text>
+                <Text style={styles.productInfo}>Batch No. {product.batch}</Text>
+                <Text style={styles.productInfo}>Pack Size {product.size}</Text>
+                <Text style={styles.productInfo}>No. of shipper/Bag {product.shippers}</Text>
             </View>
         </View>
 
@@ -108,7 +118,6 @@ const styles = StyleSheet.create({
         height: 8,
         backgroundColor: '#4CAF50',
         borderRadius: 4,
-        width: '40%', 
     },
     productCard: {
         backgroundColor: '#fff',
@@ -122,13 +131,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     productDetails: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         marginBottom: 15,
-        flexWrap: 'wrap',
     },
     productInfo: {
         color: 'gray',
+        marginBottom: 5,
     },
     input: {
         backgroundColor: '#fff',
