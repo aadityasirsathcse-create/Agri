@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductDetailCard;
+export default React.memo(ProductDetailCard);

@@ -3,8 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, Modal, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 import { RootStackParamList } from '../../../../App';
 import QRScanner from '../components/QRScanner';
+import { addScannedCode } from '../actions/qrTrackerThunks';
 
 type QRTrackerScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;
 type QRTrackerScanScreenRouteProp = RouteProp<RootStackParamList, 'CFScan'>;
@@ -17,6 +20,7 @@ type Props = {
 type ScanState = 'scanning' | 'verifying' | 'verified';
 
 const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
+  const dispatch: Dispatch<any> = useDispatch();
   const { product } = route.params;
   const [scanState, setScanState] = useState<ScanState>('scanning');
   const [scannedCode, setScannedCode] = useState<string | null>(null);
@@ -49,11 +53,8 @@ const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
     }
     setBottomSheetVisible(false);
     if (scannedCode) {
-      navigation.navigate('CFReportProduct', {
-        product: product,
-        scannedBarcode: scannedCode,
-        timestamp: new Date().getTime(),
-      });
+      dispatch(addScannedCode(product.id, scannedCode));
+      navigation.goBack();
     }
   };
 

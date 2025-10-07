@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal, BackHandler } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { RootStackParamList } from '../../../../App';
@@ -12,7 +12,8 @@ import ReportProductHeader from '../components/ReportProductHeader';
 import ProgressBar from '../components/ProgressBar';
 import ScanButton from '../components/ScanButton';
 import ProductDetailCard from '../components/ProductDetailCard';
-import { reportProduct, scan } from '../actions/qrTrackerThunks';
+import { addBarcode, reportProduct, scan } from '../actions/qrTrackerThunks';
+import { QRTrackerState } from '../reducers/qrTrackerReducer';
 
 type QRTrackerReportProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -33,25 +34,31 @@ type AddState = 'idle' | 'verifying' | 'verified';
 
 const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
   const dispatch: Dispatch<any> = useDispatch();
-  const [productDetails, setProductDetails] = useState(route.params.product);
+  const { product: initialProduct } = route.params;
+
+  const productDetails = useSelector((state: { qrTracker: QRTrackerState }) => 
+    state.qrTracker.products.find(p => p.id === initialProduct.id)
+  ) || initialProduct;
+
+  const scannedCount = productDetails.scanned;
+
   const [barcode, setBarcode] = useState('');
-  const [scannedCount, setScannedCount] = useState(route.params.product.scanned);
   const [addState, setAddState] = useState<AddState>('idle');
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const okPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (route.params?.scannedBarcode) {
-      setScannedCount(prevCount => {
-        if (prevCount < productDetails.shippers) {
-          const newCount = prevCount + 1;
-          setProductDetails(prevDetails => ({...prevDetails, scanned: newCount}));
-          return newCount;
-        }
-        return prevCount;
-      });
-    }
-  }, [route.params?.scannedBarcode, route.params?.timestamp]);
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        navigation.goBack();
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => subscription.remove();
+    }, [navigation])
+  );
 
   useEffect(() => {
     if (addState === 'verifying') {
@@ -75,14 +82,12 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
 
   const handleConfirm = () => {
     if (isComplete) {
-      const updatedProduct = { ...productDetails, scanned: scannedCount };
-      dispatch(reportProduct(updatedProduct, navigation));
+      dispatch(reportProduct(productDetails, navigation));
     }
   };
 
   const handleScan = () => {
-    const updatedProduct = { ...productDetails, scanned: scannedCount };
-    dispatch(scan(updatedProduct, navigation));
+    dispatch(scan(productDetails, navigation));
   };
 
   const handleAddBarcode = () => {
@@ -96,9 +101,7 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
     if (okPressTimer.current) {
       clearTimeout(okPressTimer.current);
     }
-    const newScannedCount = scannedCount + 1;
-    setScannedCount(newScannedCount);
-    setProductDetails({ ...productDetails, scanned: newScannedCount });
+    dispatch(addBarcode(productDetails.id, barcode));
     setBarcode('');
     setBottomSheetVisible(false);
     setAddState('idle');

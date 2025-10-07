@@ -22,7 +22,7 @@ type Props = {
 
 const QRTrackerOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
   const dispatch: Dispatch<any> = useDispatch();
-  const { products } = useSelector((state: { qrTracker: QRTrackerState }) => state.qrTracker);
+  const products = useSelector((state: { qrTracker: QRTrackerState }) => state.qrTracker.products);
 
   const allScanned = products.every((p: CFProduct) => p.scanned === p.shippers);
 
@@ -43,7 +43,7 @@ const QRTrackerOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
 
         <Text style={styles.productsTitle}>{orderDetailMessages.productsTitle}</Text>
         {products.map((product: CFProduct) => (
-            <ProductDetailCard product={product} onReportSale={() => handleReportSale(product)} />
+            <ProductDetailCard key={product.id} product={product} onReportSale={() => handleReportSale(product)} />
         ))}
       </ScrollView>
       {allScanned && (

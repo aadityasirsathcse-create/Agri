@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { setSalesError, updateProduct } from './qrTrackerActions';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList, CFProduct } from '../../../../App'; // Adjust this path as needed
+import { QRTrackerState } from '../reducers/qrTrackerReducer';
 
 type SalesNavigationProp = StackNavigationProp<RootStackParamList, 'CFSales'>;
 type OrderDetailNavigationProp = StackNavigationProp<RootStackParamList, 'CFOrderDetail'>;
@@ -37,3 +38,25 @@ export const scan = (product: CFProduct, navigation: ReportProductNavigationProp
         navigation.navigate('CFScan', { product });
     };
 }
+
+export const addScannedCode = (productId: string, scannedCode: string) => {
+    return (dispatch: Dispatch, getState: () => { qrTracker: QRTrackerState }) => {
+      const { qrTracker } = getState();
+      const product = qrTracker.products.find(p => p.id === productId);
+      if (product && product.scanned < product.shippers) {
+        const updatedProduct = { ...product, scanned: product.scanned + 1 };
+        dispatch(updateProduct(updatedProduct));
+      }
+    };
+  };
+  
+  export const addBarcode = (productId: string, barcode: string) => {
+      return (dispatch: Dispatch, getState: () => { qrTracker: QRTrackerState }) => {
+        const { qrTracker } = getState();
+        const product = qrTracker.products.find(p => p.id === productId);
+        if (product && product.scanned < product.shippers) {
+          const updatedProduct = { ...product, scanned: product.scanned + 1 };
+          dispatch(updateProduct(updatedProduct));
+        }
+      };
+    };
