@@ -22,7 +22,7 @@ const OrderPlacedScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.subtitle}>Your order has been placed successfully. You can track your order status in order details.</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.outlineButton} onPress={() => navigation.navigate('Products')}>
+        <TouchableOpacity style={styles.outlineButton} onPress={() => navigation.pop(4)}>
           <Text style={styles.outlineButtonText}>Go back</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.solidButton}  onPress={() => navigation.navigate('OrdersHistory')}>

@@ -9,6 +9,8 @@ import {
   ScrollView,
   Modal,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -54,6 +56,10 @@ const RaiseComplaintScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    style={{ flex: 1 }}
+                  >
       <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -167,6 +173,7 @@ const RaiseComplaintScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.raiseButtonText}>Raise an issue</Text>
         </TouchableOpacity>
       </View>
+      </KeyboardAvoidingView>
 
       <Modal visible={showProductModal} transparent>
         <View style={styles.modalContainer}>
@@ -286,6 +293,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 10,
+    color:'black',
   },
   orderItem: {
     flexDirection: 'row',

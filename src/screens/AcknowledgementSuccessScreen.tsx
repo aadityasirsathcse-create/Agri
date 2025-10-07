@@ -21,7 +21,7 @@ const AcknowledgementSuccessScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title}>Acknowledgement Submitted successfully</Text>
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrdersHistory')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.pop(3)}>
           <Text style={styles.buttonText}>Go back</Text>
         </TouchableOpacity>
       </View>

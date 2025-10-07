@@ -8,6 +8,8 @@ import {
   TextInput,
   ScrollView,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -38,6 +40,10 @@ const products = [
 const UpdateDistributorDetailScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+                          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                          style={{ flex: 1 }}
+                        >
       <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -109,6 +115,7 @@ const UpdateDistributorDetailScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.updateButtonText}>Update Distributor</Text>
         </TouchableOpacity>
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

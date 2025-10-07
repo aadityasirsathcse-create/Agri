@@ -9,6 +9,8 @@ import {
   Image,
   TextInput,
   Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -31,98 +33,128 @@ const TicketDetailScreen: React.FC<Props> = ({ navigation }) => {
   const handleSend = () => {
     setMessage('No other problem. Thanks.');
     setTimeout(() => {
-        setShowRatingModal(true);
-    }, 2000)
-  }
+      setShowRatingModal(true);
+    }, 2000);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="arrow-left" size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Ticket Detail</Text>
-          <Icon name="bell-outline" size={24} />
-        </View>
-
-        <View style={styles.ticketContainer}>
-          <View style={styles.ticketHeader}>
-            <Text style={styles.ticketId}>Ticket No. 09484Us145</Text>
-            <View style={styles.statusContainer}>
-              <Icon name="check-circle" size={16} color="green" />
-              <Text style={styles.ticketStatus}>
-                Resolved Last updated on 12 Mar, 2024, 11:50AM
-              </Text>
-            </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name="arrow-left" size={24} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Ticket Detail</Text>
+            <Icon name="bell-outline" size={24} />
           </View>
 
-          <View style={styles.timelineContainer}>
-            <View style={styles.timelineItem}>
-              <View style={styles.timelineIcon} />
-              <View style={styles.timelineContent}>
-                <Text style={styles.timelineTimestamp}>You 11 Mar, 11:20AM</Text>
-                <View style={styles.productDetailsContainer}>
-                  <View style={styles.productItem}>
-                    <Icon name="check-circle" size={20} color="green" />
-                    <Image source={require('../assets/p1.png')} style={styles.productImage} />
-                    <View>
-                      <Text>Probor (1kg)</Text>
-                      <Text>Quantity: 1</Text>
-                    </View>
-                  </View>
-                  <View style={styles.productItem}>
-                    <Icon name="check-circle" size={20} color="green" />
-                    <Image source={require('../assets/p2.png')} style={styles.productImage} />
-                    <View>
-                      <Text>Emerald Z+ (50ml)</Text>
-                      <Text>Quantity: 1</Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity>
-                    <Text style={styles.viewOrderLink}>View Order</Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.attachmentsTitle}>Attachments</Text>
-                <Image source={require('../assets/p1.png')} style={styles.attachmentImage} />
+          <View style={styles.ticketContainer}>
+            <View style={styles.ticketHeader}>
+              <Text style={styles.ticketId}>Ticket No. 09484Us145</Text>
+              <View style={styles.statusContainer}>
+                <Icon name="check-circle" size={16} color="green" />
+                <Text style={styles.ticketStatus}>
+                  Resolved Last updated on 12 Mar, 2024, 11:50AM
+                </Text>
               </View>
             </View>
 
-            <View style={styles.timelineItem}>
-              <View style={styles.timelineIcon} />
-              <View style={styles.timelineContent}>
-                <Text style={styles.timelineTimestamp}>Support Team 11 Mar, 11:42AM</Text>
-                <View style={styles.supportMessage}>
-                  <Text>Hi [[name]], we regret that you’ve received your order with spilling issues. We will dispatch new order containing your replaced products.</Text>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.timelineItem}>
-              <View style={styles.timelineIcon} />
-              <View style={styles.timelineContent}>
-                <Text style={styles.timelineTimestamp}>You 11 Mar, 12:10PM</Text>
-                {message ? (
-                  <View style={styles.userMessage}>
-                    <Text>{message}</Text>
-                  </View>
-                ) : (
-                  <View style={styles.messageInputContainer}>
-                    <TextInput style={styles.messageInput} placeholder="Your message..." />
-                    <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-                      <Icon name="send" size={24} color="#4CAF50" />
+            <View style={styles.timelineContainer}>
+              <View style={styles.timelineItem}>
+                <View style={styles.timelineIcon} />
+                <View style={styles.timelineContent}>
+                  <Text style={styles.timelineTimestamp}>
+                    You 11 Mar, 11:20AM
+                  </Text>
+                  <View style={styles.productDetailsContainer}>
+                    <View style={styles.productItem}>
+                      <Icon name="check-circle" size={20} color="green" />
+                      <Image
+                        source={require('../assets/p1.png')}
+                        style={styles.productImage}
+                      />
+                      <View>
+                        <Text>Probor (1kg)</Text>
+                        <Text>Quantity: 1</Text>
+                      </View>
+                    </View>
+                    <View style={styles.productItem}>
+                      <Icon name="check-circle" size={20} color="green" />
+                      <Image
+                        source={require('../assets/p2.png')}
+                        style={styles.productImage}
+                      />
+                      <View>
+                        <Text>Emerald Z+ (50ml)</Text>
+                        <Text>Quantity: 1</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity>
+                      <Text style={styles.viewOrderLink}>View Order</Text>
                     </TouchableOpacity>
                   </View>
-                )}
+                  <Text style={styles.attachmentsTitle}>Attachments</Text>
+                  <Image
+                    source={require('../assets/p1.png')}
+                    style={styles.attachmentImage}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.timelineItem}>
+                <View style={styles.timelineIcon} />
+                <View style={styles.timelineContent}>
+                  <Text style={styles.timelineTimestamp}>
+                    Support Team 11 Mar, 11:42AM
+                  </Text>
+                  <View style={styles.supportMessage}>
+                    <Text>
+                      Hi [[name]], we regret that you’ve received your order
+                      with spilling issues. We will dispatch new order
+                      containing your replaced products.
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.timelineItem}>
+                <View style={styles.timelineIcon} />
+                <View style={styles.timelineContent}>
+                  <Text style={styles.timelineTimestamp}>
+                    You 11 Mar, 12:10PM
+                  </Text>
+                  {message ? (
+                    <View style={styles.userMessage}>
+                      <Text>{message}</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.messageInputContainer}>
+                      <TextInput
+                        style={styles.messageInput}
+                        placeholder="Your message..."
+                      />
+                      <TouchableOpacity
+                        style={styles.sendButton}
+                        onPress={handleSend}
+                      >
+                        <Icon name="send" size={24} color="#4CAF50" />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              <View style={styles.endOfThread}>
+                <Text>End of thread. Support Team closed this issue.</Text>
               </View>
             </View>
-
-            <View style={styles.endOfThread}>
-                <Text>End of thread. Support Team closed this issue.</Text>
-            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       <Modal visible={showRatingModal} transparent>
         <View style={styles.modalContainer}>
@@ -134,21 +166,33 @@ const TicketDetailScreen: React.FC<Props> = ({ navigation }) => {
             <View style={styles.ratingContainer}>
               {[1, 2, 3, 4, 5].map(star => (
                 <TouchableOpacity key={star} onPress={() => setRating(star)}>
-                  <Icon name={star <= rating ? 'star' : 'star-outline'} size={32} color="#FFC107" />
+                  <Icon
+                    name={star <= rating ? 'star' : 'star-outline'}
+                    size={32}
+                    color="#FFC107"
+                  />
                 </TouchableOpacity>
               ))}
             </View>
             {rating > 0 && (
               <View>
-                <Text style={styles.modalTitle}>Tell us how can we do this better?</Text>
+                <Text style={styles.modalTitle}>
+                  Tell us how can we do this better?
+                </Text>
                 <TextInput style={styles.feedbackInput} multiline />
               </View>
             )}
             <View style={styles.modalActions}>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setShowRatingModal(false)}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setShowRatingModal(false)}
+              >
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.submitButton} onPress={() => setShowRatingModal(false)}>
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={() => setShowRatingModal(false)}
+              >
                 <Text style={styles.submitButtonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -216,7 +260,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderLeftWidth: 2,
     borderLeftColor: '#ddd',
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   timelineTimestamp: {
     color: 'gray',
@@ -277,12 +321,12 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   endOfThread: {
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 5,
-      alignItems: 'center',
-      marginVertical: 20
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 20,
   },
   modalContainer: {
     flex: 1,
@@ -319,7 +363,7 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: 'top',
     marginBottom: 20,
-    color:'black',
+    color: 'black',
   },
   modalActions: {
     flexDirection: 'row',

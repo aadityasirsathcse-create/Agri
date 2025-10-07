@@ -10,11 +10,16 @@ import {
   Image,
   PermissionsAndroid,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
-import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
+import {
+  launchImageLibrary,
+  ImagePickerResponse,
+  Asset,
+} from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 
 type AddExpenseScreenNavigationProp = StackNavigationProp<
@@ -30,7 +35,9 @@ const expenseTypes = ['TA-DA', 'Promotional'];
 
 const AddExpenseScreen: React.FC<Props> = ({ navigation }) => {
   const [showExpenseTypeDropdown, setShowExpenseTypeDropdown] = useState(false);
-  const [selectedExpenseType, setSelectedExpenseType] = useState<string | null>(null);
+  const [selectedExpenseType, setSelectedExpenseType] = useState<string | null>(
+    null,
+  );
   const [uploadedImages, setUploadedImages] = useState<Asset[]>([]);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
@@ -41,12 +48,12 @@ const AddExpenseScreen: React.FC<Props> = ({ navigation }) => {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
           {
-            title: "App Camera Permission",
-            message:"App needs access to your camera ",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK"
-          }
+            title: 'App Camera Permission',
+            message: 'App needs access to your camera ',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           return true;
@@ -64,18 +71,21 @@ const AddExpenseScreen: React.FC<Props> = ({ navigation }) => {
   const handleImageUpload = async () => {
     const hasPermission = await requestCameraPermission();
     if (!hasPermission) {
-        return;
+      return;
     }
 
-    launchImageLibrary({ mediaType: 'photo', selectionLimit: 10, quality: 1 }, (response: ImagePickerResponse) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets) {
-        setUploadedImages(prevImages => [...prevImages, ...response.assets!]);
-      }
-    });
+    launchImageLibrary(
+      { mediaType: 'photo', selectionLimit: 10, quality: 1 },
+      (response: ImagePickerResponse) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+        } else if (response.assets) {
+          setUploadedImages(prevImages => [...prevImages, ...response.assets!]);
+        }
+      },
+    );
   };
 
   const removeImage = (index: number) => {
@@ -84,122 +94,149 @@ const AddExpenseScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="arrow-left" size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Add Expense</Text>
-          <Icon name="bell-outline" size={24} />
-        </View>
-      <ScrollView>
-        <View style={styles.formContainer}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Expense Type</Text>
-            <TouchableOpacity
-              style={styles.pickerContainer}
-              onPress={() => setShowExpenseTypeDropdown(!showExpenseTypeDropdown)}
-            >
-              <Text style={styles.pickerInput}>
-                {selectedExpenseType || 'Select the type of expense...'}
-              </Text>
-              <Icon name="chevron-down" size={24} color="gray" />
-            </TouchableOpacity>
-            {showExpenseTypeDropdown && (
-              <View style={styles.dropdown}>
-                {expenseTypes.map(type => (
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-left" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Add Expense</Text>
+        <Icon name="bell-outline" size={24} />
+      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <ScrollView>
+          <View style={styles.formContainer}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Expense Type</Text>
+              <TouchableOpacity
+                style={styles.pickerContainer}
+                onPress={() =>
+                  setShowExpenseTypeDropdown(!showExpenseTypeDropdown)
+                }
+              >
+                <Text style={styles.pickerInput}>
+                  {selectedExpenseType || 'Select the type of expense...'}
+                </Text>
+                <Icon name="chevron-down" size={24} color="gray" />
+              </TouchableOpacity>
+              {showExpenseTypeDropdown && (
+                <View style={styles.dropdown}>
+                  {expenseTypes.map(type => (
+                    <TouchableOpacity
+                      key={type}
+                      onPress={() => {
+                        setSelectedExpenseType(type);
+                        setShowExpenseTypeDropdown(false);
+                      }}
+                    >
+                      <Text style={styles.dropdownItem}>{type}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            {selectedExpenseType === 'Promotional' && (
+              <View>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Activity Date</Text>
                   <TouchableOpacity
-                    key={type}
-                    onPress={() => {
-                      setSelectedExpenseType(type);
-                      setShowExpenseTypeDropdown(false);
-                    }}
+                    style={styles.dateInputContainer}
+                    onPress={() => setOpen(true)}
                   >
-                    <Text style={styles.dropdownItem}>{type}</Text>
+                    <Text style={styles.dateInput}>
+                      {date.toLocaleDateString()}
+                    </Text>
+                    <Icon name="calendar" size={24} color="gray" />
                   </TouchableOpacity>
-                ))}
+                  <DatePicker
+                    modal
+                    open={open}
+                    date={date}
+                    mode="date"
+                    onConfirm={date => {
+                      setOpen(false);
+                      setDate(date);
+                    }}
+                    onCancel={() => {
+                      setOpen(false);
+                    }}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Place of the activity</Text>
+                  <View style={styles.mapContainer}>
+                    <Image
+                      source={require('../assets/map.png')}
+                      style={styles.mapImage}
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Expense Head</Text>
+                  <View style={styles.searchInputContainer}>
+                    <TextInput
+                      style={styles.searchInput}
+                      placeholder="Promotional Visit"
+                    />
+                    <Icon name="magnify" size={24} color="gray" />
+                  </View>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Total Amount</Text>
+                  <View style={styles.amountInputContainer}>
+                    <Text style={styles.currencySymbol}>₹</Text>
+                    <TextInput
+                      style={styles.amountInput}
+                      keyboardType="numeric"
+                    />
+                  </View>
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Upload Images/Videos</Text>
+                  {uploadedImages.length > 0 ? (
+                    <View style={styles.imagePreviewContainer}>
+                      {uploadedImages.map((img, i) => (
+                        <View key={i} style={styles.imageWrapper}>
+                          <Image
+                            source={{ uri: img.uri }}
+                            style={styles.previewImage}
+                          />
+                          <TouchableOpacity
+                            style={styles.removeImageButton}
+                            onPress={() => removeImage(i)}
+                          >
+                            <Icon name="close-circle" size={20} color="red" />
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.uploadContainer}
+                      onPress={handleImageUpload}
+                    >
+                      <Icon name="plus" size={24} color="gray" />
+                      <Text>Click here in the box to choose photos</Text>
+                      <Text style={styles.uploadHint}>Max. 10 Bills</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             )}
           </View>
-
-          {selectedExpenseType === 'Promotional' && (
-              <View>
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Activity Date</Text>
-                    <TouchableOpacity style={styles.dateInputContainer} onPress={() => setOpen(true)}>
-                        <Text style={styles.dateInput}>{date.toLocaleDateString()}</Text>
-                        <Icon name="calendar" size={24} color="gray" />
-                    </TouchableOpacity>
-                    <DatePicker
-                        modal
-                        open={open}
-                        date={date}
-                        mode="date"
-                        onConfirm={(date) => {
-                            setOpen(false)
-                            setDate(date)
-                        }}
-                        onCancel={() => {
-                            setOpen(false)
-                        }}
-                    />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Place of the activity</Text>
-                    <View style={styles.mapContainer}>
-                    <Image source={require('../assets/map.png')} style={styles.mapImage} />
-                    </View>
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Expense Head</Text>
-                    <View style={styles.searchInputContainer}>
-                        <TextInput
-                        style={styles.searchInput}
-                        placeholder="Promotional Visit"
-                        />
-                        <Icon name="magnify" size={24} color="gray" />
-                    </View>
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Total Amount</Text>
-                    <View style={styles.amountInputContainer}>
-                        <Text style={styles.currencySymbol}>₹</Text>
-                        <TextInput style={styles.amountInput} keyboardType="numeric" />
-                    </View>
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Upload Images/Videos</Text>
-                    {uploadedImages.length > 0 ? (
-                        <View style={styles.imagePreviewContainer}>
-                            {uploadedImages.map((img, i) => (
-                                <View key={i} style={styles.imageWrapper}>
-                                    <Image source={{ uri: img.uri }} style={styles.previewImage} />
-                                    <TouchableOpacity style={styles.removeImageButton} onPress={() => removeImage(i)}>
-                                        <Icon name="close-circle" size={20} color="red" />
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
-                        </View>
-                    ) : (
-                        <TouchableOpacity style={styles.uploadContainer} onPress={handleImageUpload}>
-                            <Icon name="plus" size={24} color="gray" />
-                            <Text>Click here in the box to choose photos</Text>
-                            <Text style={styles.uploadHint}>Max. 10 Bills</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-              </View>
-          )}
+        </ScrollView>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.submitButton}>
+            <Text style={styles.submitButtonText}>Submit Expense</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.submitButton}>
-          <Text style={styles.submitButtonText}>Submit Expense</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -286,8 +323,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   mapImage: {
-      width: '100%',
-      height: '100%',
+    width: '100%',
+    height: '100%',
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -303,7 +340,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     color: 'black',
   },
-  amountInputContainer:{
+  amountInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -312,46 +349,46 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
   },
-  currencySymbol:{
-      fontSize: 16,
+  currencySymbol: {
+    fontSize: 16,
   },
-  amountInput:{
-      flex: 1,
-      paddingVertical: 10,
-      color: 'black',
+  amountInput: {
+    flex: 1,
+    paddingVertical: 10,
+    color: 'black',
   },
-  uploadContainer:{
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 10,
-      padding: 20,
-      borderStyle: 'dashed',
+  uploadContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 10,
+    padding: 20,
+    borderStyle: 'dashed',
   },
-  uploadHint:{
-      fontSize: 12,
-      color: 'gray',
-      marginTop: 5,
+  uploadHint: {
+    fontSize: 12,
+    color: 'gray',
+    marginTop: 5,
   },
-  imagePreviewContainer:{
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: 10,
+  imagePreviewContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
   },
-  imageWrapper:{
-      position: 'relative',
+  imageWrapper: {
+    position: 'relative',
   },
-  previewImage:{
-      width: 100,
-      height: 100,
-      borderRadius: 5,
+  previewImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
   },
-  removeImageButton:{
-      position: 'absolute',
-      top: -5,
-      right: -5,
-  }
+  removeImageButton: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+  },
 });
 
 export default AddExpenseScreen;
