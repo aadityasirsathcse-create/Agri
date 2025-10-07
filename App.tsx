@@ -126,7 +126,7 @@ export type RootStackParamList = {
   Success: undefined;
   DealerInventory: undefined;
   DealerScan: undefined;
-  DealerQRDetail: undefined;
+  DealerQRDetail: { showConfirm?: boolean };
   DealerSuccess: undefined;
 };
 

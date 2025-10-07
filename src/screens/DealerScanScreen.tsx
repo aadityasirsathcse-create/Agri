@@ -41,7 +41,7 @@ const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
   const handleOkPress = () => {
     setBottomSheetVisible(false);
     setScanState('scanning');
-    navigation.navigate('DealerQRDetail');
+    navigation.navigate('DealerQRDetail', { showConfirm: true });
   };
 
   return (

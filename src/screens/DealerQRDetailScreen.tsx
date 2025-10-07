@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
 type DealerQRDetailScreenNavigationProp = StackNavigationProp<
@@ -9,11 +10,16 @@ type DealerQRDetailScreenNavigationProp = StackNavigationProp<
   'DealerQRDetail'
 >;
 
+type DealerQRDetailScreenRouteProp = RouteProp<RootStackParamList, 'DealerQRDetail'>;
+
 type Props = {
   navigation: DealerQRDetailScreenNavigationProp;
+  route: DealerQRDetailScreenRouteProp;
 };
 
-const DealerQRDetailScreen: React.FC<Props> = ({ navigation }) => {
+const DealerQRDetailScreen: React.FC<Props> = ({ navigation, route }) => {
+  const showConfirm = route.params?.showConfirm ?? false;
+
   return (
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
@@ -50,9 +56,11 @@ const DealerQRDetailScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.confirmButton} onPress={() => navigation.navigate('DealerSuccess')}>
-          <Text style={styles.confirmButtonText}>Confirm</Text>
-        </TouchableOpacity>
+      {showConfirm && (
+        <TouchableOpacity style={styles.confirmButton} onPress={() => navigation.navigate('DealerSuccess')}>
+            <Text style={styles.confirmButtonText}>Confirm</Text>
+          </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };

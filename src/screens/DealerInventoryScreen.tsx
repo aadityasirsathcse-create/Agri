@@ -62,13 +62,13 @@ const DealerInventoryScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.content}>
           <Text style={styles.historyTitle}>Report History</Text>
           {filteredReports.map((report, index) => (
-            <View key={index} style={styles.historyItem}>
+            <TouchableOpacity key={index} style={styles.historyItem} onPress={() => navigation.navigate('DealerQRDetail', { showConfirm: false })}>
               <View>
                 <Text style={[styles.reportType, {backgroundColor: report.type === 'Inventory Report' ? '#4CAF50' : '#FFC107'}]}>{report.type}</Text>
                 <Text style={styles.reportId}>No. {report.id}</Text>
               </View>
               <Icon name="chevron-right-circle-outline" size={30} color="green"/>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
