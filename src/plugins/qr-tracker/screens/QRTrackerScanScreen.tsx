@@ -3,7 +3,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../../../App'; // Adjust if needed
+import { RootStackParamList } from '../../../../App';
 import QRScanner from '../components/QRScanner';
 
 type QRTrackerScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CFScan'>;

@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
-import { RootStackParamList } from '../../../../App'; // Adjust if needed
+import { RootStackParamList } from '../../../../App';
 import { salesScreenMessages } from '../constants/messages';
 import SalesHeader from '../components/SalesHeader';
 import { reportSales } from '../actions/qrTrackerThunks';
@@ -30,8 +30,8 @@ type Props = {
 
 const recentSearches = [
   { id: '1', number: 'IE0039DN30', status: 'Completed' },
-  { id: '2', number: 'IE0039DN30', status: 'In progress' },
-  { id: '3', number: 'IE0039DN30', status: 'Completed' },
+  { id: '2', number: 'IE0039DN33', status: 'In progress' },
+  { id: '3', number: 'IE0039DN36', status: 'Completed' },
 ];
 
 const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {

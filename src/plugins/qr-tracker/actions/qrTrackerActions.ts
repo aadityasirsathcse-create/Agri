@@ -1,6 +1,6 @@
 
 import { SET_INVOICE_NUMBER, SET_SALES_ERROR, UPDATE_PRODUCT } from '../constants/qrTrackerTypes';
-import { CFProduct } from '../../../../App'; // Adjust path as needed
+import { CFProduct } from '../../../../App';
 
 export const setInvoiceNumber = (invoiceNumber: string) => ({
   type: SET_INVOICE_NUMBER,

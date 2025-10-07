@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 interface ProfileHeaderProps {
   userName: string;
   userRole: string;
-  profileImageUrl: any; // Using 'any' for require, consider a more specific type
+  profileImageUrl: any;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userName, userRole, profileImageUrl }) => {
