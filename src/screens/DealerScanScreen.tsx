@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -15,23 +15,33 @@ type Props = {
 
 const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
   const [isScanning, setIsScanning] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onReadCode = (event: { nativeEvent: { codeStringValue: string } }) => {
     if (event?.nativeEvent?.codeStringValue) {
-      setIsScanning(false); // stop scanning
+      setIsScanning(false);
+      setIsLoading(true);
       console.log('Scanned QR Code:', event.nativeEvent.codeStringValue);
-      Alert.alert('Scanned!', event.nativeEvent.codeStringValue, [
-        { 
-          text: 'OK', 
-          onPress: () => navigation.navigate('DealerQRDetail') 
-        },
-      ]);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        navigation.navigate('DealerQRDetail');
+      }, 1000);
     }
   };
 
   const handleScanAgain = () => {
     setIsScanning(true);
   };
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#fff" />
+        <Text style={styles.infoText}>Processing...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -50,8 +60,8 @@ const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
       ) : (
         <View style={styles.centered}>
           <Text style={styles.infoText}>Scan completed!</Text>
-          <TouchableOpacity 
-            onPress={handleScanAgain} 
+          <TouchableOpacity
+            onPress={handleScanAgain}
             style={styles.buttonTouchable}
           >
             <Text style={styles.buttonText}>Scan Again</Text>
@@ -63,8 +73,8 @@ const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1 
+  container: {
+    flex: 1,
   },
   cameraContainer: {
     flex: 1,
@@ -72,26 +82,26 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  centered: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    backgroundColor: 'black' 
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
   },
-  infoText: { 
-    color: '#fff', 
-    fontSize: 18, 
-    textAlign: 'center', 
-    marginBottom: 16 
+  infoText: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 16,
   },
-  buttonText: { 
-    fontSize: 18, 
-    color: 'rgb(0,122,255)' 
+  buttonText: {
+    fontSize: 18,
+    color: 'rgb(0,122,255)',
   },
-  buttonTouchable: { 
-    padding: 12, 
-    backgroundColor: '#fff', 
-    borderRadius: 8 
+  buttonTouchable: {
+    padding: 12,
+    backgroundColor: '#fff',
+    borderRadius: 8,
   },
 });
 
