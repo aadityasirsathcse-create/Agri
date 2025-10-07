@@ -309,6 +309,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 10,
+    color: 'black',
   },
   dateInputContainer: {
     flexDirection: 'row',

@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
   },
   messageInput: {
     flex: 1,
+    color: 'black',
   },
   sendButton: {
     padding: 5,
@@ -318,6 +319,7 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: 'top',
     marginBottom: 20,
+    color:'black',
   },
   modalActions: {
     flexDirection: 'row',

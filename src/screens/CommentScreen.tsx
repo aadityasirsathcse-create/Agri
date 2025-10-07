@@ -435,6 +435,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     textAlignVertical: 'top',
+    color: 'black',
   },
   focusedCommentActions: {
     flexDirection: 'row',

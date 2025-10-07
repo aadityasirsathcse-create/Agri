@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 10,
+    color: 'black',
   },
   amountInputContainer:{
     flexDirection: 'row',
@@ -317,6 +318,7 @@ const styles = StyleSheet.create({
   amountInput:{
       flex: 1,
       paddingVertical: 10,
+      color: 'black',
   },
   uploadContainer:{
       alignItems: 'center',

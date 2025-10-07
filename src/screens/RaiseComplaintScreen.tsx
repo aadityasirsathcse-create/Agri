@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
   remarksInput: {
     height: 100,
     textAlignVertical: 'top',
+    color:'black',
   },
   pickerContainer: {
     flexDirection: 'row',
