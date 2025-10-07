@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderWidth: 1,
     borderColor: '#ddd',
-    textAlign: 'center',
+    textAlign: 'left',
   },
   orText: {
     textAlign: 'center',
