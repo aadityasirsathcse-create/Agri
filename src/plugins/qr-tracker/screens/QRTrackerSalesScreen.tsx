@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -18,6 +17,7 @@ import { salesScreenMessages } from '../constants/messages';
 import SalesHeader from '../components/SalesHeader';
 import { reportSales } from '../actions/qrTrackerThunks';
 import { QRTrackerState } from '../reducers/qrTrackerReducer';
+import RecentSearchItem from '../components/RecentSearchItem';
 
 type QRTrackerSalesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -29,9 +29,9 @@ type Props = {
 };
 
 const recentSearches = [
-  { id: '1', number: 'IE0039DN30', status: 'Completed' },
-  { id: '2', number: 'IE0039DN33', status: 'In progress' },
-  { id: '3', number: 'IE0039DN36', status: 'Completed' },
+  { id: '1', number: 'IE0039DN30', status: 'Completed' as const },
+  { id: '2', number: 'IE0039DN33', status: 'In progress' as const },
+  { id: '3', number: 'IE0039DN36', status: 'Completed' as const },
 ];
 
 const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
@@ -41,6 +41,10 @@ const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleReportSales = () => {
     dispatch(reportSales(invoiceNumber, navigation));
+  };
+
+  const handleRecentSearchPress = () => {
+    navigation.navigate('CFOrderDetail' as any);
   };
 
   return (
@@ -62,27 +66,11 @@ const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
 
           <Text style={styles.recentSearchesTitle}>{salesScreenMessages.recentSearchesTitle}</Text>
           {recentSearches.map(item => (
-            <TouchableOpacity
+            <RecentSearchItem
               key={item.id}
-              onPress={() => navigation.navigate('CFOrderDetail' as any)}
-            >
-              <View style={styles.recentSearchItem}>
-                <View>
-                  <Text
-                    style={[
-                      styles.status,
-                      item.status === 'Completed'
-                        ? styles.completed
-                        : styles.inProgress,
-                    ]}
-                  >
-                    {item.status}
-                  </Text>
-                  <Text style={styles.invoiceNumber}>{item.number}</Text>
-                </View>
-                <Icon name="arrow-right" size={24} color="#4CAF50" />
-              </View>
-            </TouchableOpacity>
+              item={item}
+              onPress={handleRecentSearchPress}
+            />
           ))}
         </View>
       </ScrollView>
@@ -125,34 +113,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 15,
-  },
-  recentSearchItem: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  status: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: 5,
-    color: '#fff',
-    alignSelf: 'flex-start',
-    marginBottom: 5,
-  },
-  completed: {
-    backgroundColor: '#4CAF50',
-  },
-  inProgress: {
-    backgroundColor: '#FFC107',
-  },
-  invoiceNumber: {
-    fontWeight: 'bold',
   },
   errorText: {
     color: 'red',
