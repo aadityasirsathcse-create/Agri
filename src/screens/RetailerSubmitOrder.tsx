@@ -12,7 +12,8 @@ type Props = {
 
 const RetailerSubmitOrderScreen: React.FC<Props> = ({ navigation }) => {
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
+    <ScrollView >
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Order #IE0039DN30</Text>
       </View>
@@ -36,14 +37,14 @@ const RetailerSubmitOrderScreen: React.FC<Props> = ({ navigation }) => {
           <Text style={styles.productDetailValue}>5</Text>
         </View>
       </View>
-
-      <TouchableOpacity 
+    </ScrollView>
+    <TouchableOpacity 
         style={styles.confirmButton}
         onPress={() => navigation.navigate('Success')}
       >
         <Text style={styles.confirmButtonText}>Confirm</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 };
 
