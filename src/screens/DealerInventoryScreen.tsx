@@ -22,6 +22,14 @@ const DealerInventoryScreen: React.FC<Props> = ({ navigation }) => {
     { type: 'Inventory Report', id: 'IE0039DN30' },
   ];
 
+  const filteredReports = reportHistory.filter(report => {
+    if (activeTab === 'Inventory') {
+      return report.type === 'Inventory Report';
+    } else {
+      return report.type === 'Usage Report';
+    }
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -53,7 +61,7 @@ const DealerInventoryScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.content}>
           <Text style={styles.historyTitle}>Report History</Text>
-          {reportHistory.map((report, index) => (
+          {filteredReports.map((report, index) => (
             <View key={index} style={styles.historyItem}>
               <View>
                 <Text style={[styles.reportType, {backgroundColor: report.type === 'Inventory Report' ? '#4CAF50' : '#FFC107'}]}>{report.type}</Text>

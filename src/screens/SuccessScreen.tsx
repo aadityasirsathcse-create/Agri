@@ -18,7 +18,7 @@ const SuccessScreen: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.subtitle}>
         Usage report successfully updated for the order number IE0039DN30.
       </Text>
-      <TouchableOpacity onPress={() => navigation.pop(2)} style={styles.button}>
+      <TouchableOpacity onPress={() => navigation.pop(3)} style={styles.button}>
         <Text style={styles.buttonText}>Okay</Text>
       </TouchableOpacity>
     </View>
