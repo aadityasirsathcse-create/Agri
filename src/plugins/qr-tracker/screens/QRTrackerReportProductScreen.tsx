@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal, BackHandler } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
+import * as Animatable from 'react-native-animatable';
 
 import { RootStackParamList } from '../../../../App';
 import { reportProductMessages } from '../constants/messages';
@@ -45,7 +46,6 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
   const [barcode, setBarcode] = useState('');
   const [addState, setAddState] = useState<AddState>('idle');
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const okPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -66,15 +66,6 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
         setAddState('verified');
       }, 1000);
       return () => clearTimeout(timer);
-    // } else if (addState === 'verified') {
-    //   okPressTimer.current = setTimeout(() => {
-    //     handleOkPress();
-    //   }, 3000);
-    //   return () => {
-    //     if (okPressTimer.current) {
-    //       clearTimeout(okPressTimer.current);
-    //     }
-    //   };
     }
   }, [addState]);
 
@@ -98,9 +89,6 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
   };
 
   const handleOkPress = () => {
-    if (okPressTimer.current) {
-      clearTimeout(okPressTimer.current);
-    }
     dispatch(addBarcode(productDetails.id, barcode));
     setBarcode('');
     setBottomSheetVisible(false);
@@ -154,6 +142,9 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
             )}
             {addState === 'verified' && (
               <>
+                <Animatable.View animation="zoomIn" duration={1500} style={styles.animationContainer}>
+                  <Text style={styles.checkmark}>✓</Text>
+                </Animatable.View>
                 <Text style={styles.infoText}>Barcode added</Text>
                 <TouchableOpacity style={styles.okButton} onPress={handleOkPress}>
                   <Text style={styles.okButtonText}>OK</Text>
@@ -174,6 +165,19 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+  },
+  animationContainer: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    borderRadius: 50,
+  },
+  checkmark: {
+    color: '#fff',
+    fontSize: 50,
+    fontWeight: 'bold',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -237,7 +241,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
-    height: 200,
+    height: 250,
   },
   infoText: {
     marginTop: 16,

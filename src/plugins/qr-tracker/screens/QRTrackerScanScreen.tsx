@@ -1,10 +1,12 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, Modal, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
+import * as Animatable from 'react-native-animatable';
+
 import { RootStackParamList } from '../../../../App';
 import QRScanner from '../components/QRScanner';
 import { addScannedCode } from '../actions/qrTrackerThunks';
@@ -25,7 +27,6 @@ const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
   const [scanState, setScanState] = useState<ScanState>('scanning');
   const [scannedCode, setScannedCode] = useState<string | null>(null);
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const navigationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (scanState === 'verifying') {
@@ -34,23 +35,9 @@ const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-
-    // if (scanState === 'verified') {
-    //   navigationTimer.current = setTimeout(() => {
-    //     handleNavigation();
-    //   }, 3000);
-    //   return () => {
-    //     if (navigationTimer.current) {
-    //       clearTimeout(navigationTimer.current);
-    //     }
-    //   };
-    // }
   }, [scanState]);
 
   const handleNavigation = () => {
-    if (navigationTimer.current) {
-      clearTimeout(navigationTimer.current);
-    }
     setBottomSheetVisible(false);
     if (scannedCode) {
       dispatch(addScannedCode(product.id, scannedCode));
@@ -91,7 +78,10 @@ const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
             )}
             {scanState === 'verified' && (
               <>
-                <Text style={styles.infoText}>QR is varified</Text>
+                <Animatable.View animation="zoomIn" duration={1500} style={styles.animationContainer}>
+                  <Text style={styles.checkmark}>✓</Text>
+                </Animatable.View>
+                <Text style={styles.infoText}>QR is verified</Text>
                 <TouchableOpacity style={styles.okButton} onPress={handleOkPress}>
                   <Text style={styles.okButtonText}>OK</Text>
                 </TouchableOpacity>
@@ -108,6 +98,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  animationContainer: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    borderRadius: 50,
+  },
+  checkmark: {
+    color: '#fff',
+    fontSize: 50,
+    fontWeight: 'bold',
+  },
   bottomSheetContainer: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -119,7 +122,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
-    height: 200,
+    height: 250,
   },
   infoText: {
     marginTop: 16,
