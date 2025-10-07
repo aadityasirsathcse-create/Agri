@@ -66,15 +66,15 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
         setAddState('verified');
       }, 1000);
       return () => clearTimeout(timer);
-    } else if (addState === 'verified') {
-      okPressTimer.current = setTimeout(() => {
-        handleOkPress();
-      }, 3000);
-      return () => {
-        if (okPressTimer.current) {
-          clearTimeout(okPressTimer.current);
-        }
-      };
+    // } else if (addState === 'verified') {
+    //   okPressTimer.current = setTimeout(() => {
+    //     handleOkPress();
+    //   }, 3000);
+    //   return () => {
+    //     if (okPressTimer.current) {
+    //       clearTimeout(okPressTimer.current);
+    //     }
+    //   };
     }
   }, [addState]);
 
@@ -134,7 +134,7 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
         style={[styles.confirmButton, !isComplete && styles.disabledButton]}
         onPress={handleConfirm}
         disabled={!isComplete}>
-        <Text style={styles.confirmButtonText}>{reportProductMessages.confirmButtonText}</Text>
+        <Text style={[styles.confirmButtonText, !isComplete && styles.disabledButtonText]}>{reportProductMessages.confirmButtonText}</Text>
       </TouchableOpacity>
       <Modal
         animationType="slide"
@@ -222,6 +222,9 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#A5D6A7',
+  },
+  disabledButtonText: {
+    color: '#c0c0c0',
   },
   bottomSheetContainer: {
     flex: 1,

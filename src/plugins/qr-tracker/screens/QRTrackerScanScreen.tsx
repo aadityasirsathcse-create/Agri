@@ -35,16 +35,16 @@ const QRTrackerScanScreen: React.FC<Props> = ({ navigation, route }) => {
       return () => clearTimeout(timer);
     }
 
-    if (scanState === 'verified') {
-      navigationTimer.current = setTimeout(() => {
-        handleNavigation();
-      }, 3000);
-      return () => {
-        if (navigationTimer.current) {
-          clearTimeout(navigationTimer.current);
-        }
-      };
-    }
+    // if (scanState === 'verified') {
+    //   navigationTimer.current = setTimeout(() => {
+    //     handleNavigation();
+    //   }, 3000);
+    //   return () => {
+    //     if (navigationTimer.current) {
+    //       clearTimeout(navigationTimer.current);
+    //     }
+    //   };
+    // }
   }, [scanState]);
 
   const handleNavigation = () => {
