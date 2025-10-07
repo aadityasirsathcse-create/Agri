@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ActivityIndicator, Modal, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as Animatable from 'react-native-animatable';
 import { RootStackParamList } from '../../App';
 
 type DealerScanScreenNavigationProp = StackNavigationProp<
@@ -13,61 +15,76 @@ type Props = {
   navigation: DealerScanScreenNavigationProp;
 };
 
+type ScanState = 'scanning' | 'verifying' | 'verified';
+
 const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
-  const [isScanning, setIsScanning] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [scanState, setScanState] = useState<ScanState>('scanning');
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+
+  useEffect(() => {
+    if (scanState === 'verifying') {
+      const timer = setTimeout(() => {
+        setScanState('verified');
+      }, 1000); // Simulate verification time
+      return () => clearTimeout(timer);
+    }
+  }, [scanState]);
 
   const onReadCode = (event: { nativeEvent: { codeStringValue: string } }) => {
-    if (event?.nativeEvent?.codeStringValue) {
-      setIsScanning(false);
-      setIsLoading(true);
+    if (scanState === 'scanning' && event?.nativeEvent?.codeStringValue) {
       console.log('Scanned QR Code:', event.nativeEvent.codeStringValue);
-
-      setTimeout(() => {
-        setIsLoading(false);
-        navigation.navigate('DealerQRDetail');
-      }, 1000);
+      setScanState('verifying');
+      setBottomSheetVisible(true);
     }
   };
 
-  const handleScanAgain = () => {
-    setIsScanning(true);
+  const handleOkPress = () => {
+    setBottomSheetVisible(false);
+    setScanState('scanning');
+    navigation.navigate('DealerQRDetail');
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#fff" />
-        <Text style={styles.infoText}>Processing...</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      {isScanning ? (
-        <View style={styles.cameraContainer}>
-          <Camera
-            cameraType={CameraType.Back}
-            scanBarcode={true}
-            showFrame={true}
-            laserColor="red"
-            frameColor="white"
-            onReadCode={onReadCode}
-            style={styles.camera}
-          />
+      <Camera
+        cameraType={CameraType.Back}
+        scanBarcode={true}
+        showFrame={true}
+        laserColor="red"
+        frameColor="white"
+        onReadCode={onReadCode}
+        style={styles.camera}
+      />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isBottomSheetVisible}
+        onRequestClose={() => {
+          setBottomSheetVisible(false);
+          setScanState('scanning');
+        }}>
+        <View style={styles.bottomSheetContainer}>
+          <View style={styles.bottomSheet}>
+            {scanState === 'verifying' && (
+              <>
+                <ActivityIndicator size="large" color="#000" />
+                <Text style={styles.infoText}>Verifying...</Text>
+              </>
+            )}
+            {scanState === 'verified' && (
+              <>
+                <Animatable.View animation="zoomIn" duration={500} style={styles.animationContainer}>
+                  <Text style={styles.checkmark}>✓</Text>
+                </Animatable.View>
+                <Text style={styles.infoText}>QR is verified</Text>
+                <TouchableOpacity style={styles.okButton} onPress={handleOkPress}>
+                  <Text style={styles.okButtonText}>OK</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
         </View>
-      ) : (
-        <View style={styles.centered}>
-          <Text style={styles.infoText}>Scan completed!</Text>
-          <TouchableOpacity
-            onPress={handleScanAgain}
-            style={styles.buttonTouchable}
-          >
-            <Text style={styles.buttonText}>Scan Again</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      </Modal>
     </View>
   );
 };
@@ -76,32 +93,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  cameraContainer: {
-    flex: 1,
-  },
   camera: {
     flex: 1,
   },
-  centered: {
+  bottomSheetContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  bottomSheet: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     alignItems: 'center',
-    backgroundColor: 'black',
+    height: 250,
   },
   infoText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
     marginTop: 16,
-  },
-  buttonText: {
     fontSize: 18,
-    color: 'rgb(0,122,255)',
   },
-  buttonTouchable: {
-    padding: 12,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+  okButton: {
+    marginTop: 20,
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  okButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  animationContainer: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    borderRadius: 50,
+  },
+  checkmark: {
+    color: '#fff',
+    fontSize: 50,
+    fontWeight: 'bold',
   },
 });
 
