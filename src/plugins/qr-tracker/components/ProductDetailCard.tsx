@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { CFProduct } from '../../../../App'; // Adjust path as needed
+import { CFProduct } from '../../../../App';
 
 interface ProductDetailCardProps {
   product: CFProduct;

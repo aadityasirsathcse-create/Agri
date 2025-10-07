@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
@@ -31,39 +31,48 @@ type Props = {
 
 const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
   const dispatch: Dispatch<any> = useDispatch();
-  const productDetailsRef = useRef(route.params.product);
+  const [productDetails, setProductDetails] = useState(route.params.product);
   const [barcode, setBarcode] = useState('');
   const [scannedCount, setScannedCount] = useState(route.params.product.scanned);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (route.params?.scannedBarcode) {
       setScannedCount(prevCount => {
-        if (prevCount < productDetailsRef.current.shippers) {
-          return prevCount + 1;
+        if (prevCount < productDetails.shippers) {
+          const newCount = prevCount + 1;
+          setProductDetails(prevDetails => ({...prevDetails, scanned: newCount}));
+          return newCount;
         }
         return prevCount;
       });
     }
   }, [route.params?.scannedBarcode, route.params?.timestamp]);
 
-  const isComplete = scannedCount === productDetailsRef.current.shippers;
+  const isComplete = scannedCount === productDetails.shippers;
 
   const handleConfirm = () => {
     if (isComplete) {
-      const updatedProduct = { ...productDetailsRef.current, scanned: scannedCount };
+      const updatedProduct = { ...productDetails, scanned: scannedCount };
       dispatch(reportProduct(updatedProduct, navigation));
     }
   };
 
   const handleScan = () => {
-    const updatedProduct = { ...productDetailsRef.current, scanned: scannedCount };
+    const updatedProduct = { ...productDetails, scanned: scannedCount };
     dispatch(scan(updatedProduct, navigation));
   };
 
   const handleAddBarcode = () => {
-    if (barcode.trim() !== '' && scannedCount < productDetailsRef.current.shippers) {
-      setScannedCount(prevCount => prevCount + 1);
-      setBarcode('');
+    if (barcode.trim() !== '' && scannedCount < productDetails.shippers) {
+      setIsLoading(true);
+      setTimeout(() => {
+        const newScannedCount = scannedCount + 1;
+        setScannedCount(newScannedCount);
+        setProductDetails({ ...productDetails, scanned: newScannedCount });
+        setBarcode('');
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
@@ -74,8 +83,8 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
         onBackPress={() => navigation.goBack()}
       />
       <ScrollView style={styles.content}>
-        <ProgressBar scanned={scannedCount} total={productDetailsRef.current.shippers} />
-        <ProductDetailCard product={productDetailsRef.current} onReportSale={() => {}} />
+        <ProgressBar scanned={scannedCount} total={productDetails.shippers} />
+        <ProductDetailCard product={productDetails} onReportSale={() => {}} />
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -83,8 +92,8 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
             value={barcode}
             onChangeText={setBarcode}
           />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddBarcode}>
-            <Text style={styles.addButtonText}>Add</Text>
+          <TouchableOpacity style={styles.addButton} onPress={handleAddBarcode} disabled={isLoading}>
+            {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.addButtonText}>Add</Text>}
           </TouchableOpacity>
         </View>
         <Text style={styles.orText}>{reportProductMessages.orText}</Text>
@@ -128,6 +137,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     padding: 15,
     borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 60,
+    height: 50,
   },
   addButtonText: {
     color: '#fff',
