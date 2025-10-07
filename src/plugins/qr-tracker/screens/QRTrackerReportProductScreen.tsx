@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView, ActivityIndicator, Modal } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { RootStackParamList, CFProduct } from '../../../../App'; // Adjust if needed
+import { RootStackParamList } from '../../../../App';
 import { reportProductMessages } from '../constants/messages';
 import ReportProductHeader from '../components/ReportProductHeader';
 import ProgressBar from '../components/ProgressBar';
@@ -29,12 +29,16 @@ type Props = {
   route: QRTrackerReportProductScreenRouteProp;
 };
 
+type AddState = 'idle' | 'verifying' | 'verified';
+
 const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
   const dispatch: Dispatch<any> = useDispatch();
   const [productDetails, setProductDetails] = useState(route.params.product);
   const [barcode, setBarcode] = useState('');
   const [scannedCount, setScannedCount] = useState(route.params.product.scanned);
-  const [isLoading, setIsLoading] = useState(false);
+  const [addState, setAddState] = useState<AddState>('idle');
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const okPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (route.params?.scannedBarcode) {
@@ -48,6 +52,24 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
       });
     }
   }, [route.params?.scannedBarcode, route.params?.timestamp]);
+
+  useEffect(() => {
+    if (addState === 'verifying') {
+      const timer = setTimeout(() => {
+        setAddState('verified');
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (addState === 'verified') {
+      okPressTimer.current = setTimeout(() => {
+        handleOkPress();
+      }, 3000);
+      return () => {
+        if (okPressTimer.current) {
+          clearTimeout(okPressTimer.current);
+        }
+      };
+    }
+  }, [addState]);
 
   const isComplete = scannedCount === productDetails.shippers;
 
@@ -65,15 +87,21 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
 
   const handleAddBarcode = () => {
     if (barcode.trim() !== '' && scannedCount < productDetails.shippers) {
-      setIsLoading(true);
-      setTimeout(() => {
-        const newScannedCount = scannedCount + 1;
-        setScannedCount(newScannedCount);
-        setProductDetails({ ...productDetails, scanned: newScannedCount });
-        setBarcode('');
-        setIsLoading(false);
-      }, 1000);
+      setAddState('verifying');
+      setBottomSheetVisible(true);
     }
+  };
+
+  const handleOkPress = () => {
+    if (okPressTimer.current) {
+      clearTimeout(okPressTimer.current);
+    }
+    const newScannedCount = scannedCount + 1;
+    setScannedCount(newScannedCount);
+    setProductDetails({ ...productDetails, scanned: newScannedCount });
+    setBarcode('');
+    setBottomSheetVisible(false);
+    setAddState('idle');
   };
 
   return (
@@ -92,8 +120,8 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
             value={barcode}
             onChangeText={setBarcode}
           />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddBarcode} disabled={isLoading}>
-            {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.addButtonText}>Add</Text>}
+          <TouchableOpacity style={styles.addButton} onPress={handleAddBarcode} disabled={addState !== 'idle'}>
+            {addState !== 'idle' ? <ActivityIndicator color="#fff" /> : <Text style={styles.addButtonText}>Add</Text>}
           </TouchableOpacity>
         </View>
         <Text style={styles.orText}>{reportProductMessages.orText}</Text>
@@ -102,10 +130,36 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
       <TouchableOpacity
         style={[styles.confirmButton, !isComplete && styles.disabledButton]}
         onPress={handleConfirm}
-        disabled={!isComplete}
-      >
+        disabled={!isComplete}>
         <Text style={styles.confirmButtonText}>{reportProductMessages.confirmButtonText}</Text>
       </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isBottomSheetVisible}
+        onRequestClose={() => {
+          setBottomSheetVisible(false);
+          setAddState('idle');
+        }}>
+        <View style={styles.bottomSheetContainer}>
+          <View style={styles.bottomSheet}>
+            {addState === 'verifying' && (
+              <>
+                <ActivityIndicator size="large" color="#000" />
+                <Text style={styles.infoText}>Verifying...</Text>
+              </>
+            )}
+            {addState === 'verified' && (
+              <>
+                <Text style={styles.infoText}>Barcode added</Text>
+                <TouchableOpacity style={styles.okButton} onPress={handleOkPress}>
+                  <Text style={styles.okButtonText}>OK</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -165,6 +219,35 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#A5D6A7',
+  },
+  bottomSheetContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  bottomSheet: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+    height: 200,
+  },
+  infoText: {
+    marginTop: 16,
+    fontSize: 18,
+  },
+  okButton: {
+    marginTop: 20,
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  okButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 
