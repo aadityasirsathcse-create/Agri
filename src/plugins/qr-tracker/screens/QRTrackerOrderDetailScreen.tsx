@@ -3,12 +3,13 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootStackParamList } from '../../../../App'; // Adjust if needed
-import { QrTrackerState } from '../reducers/qrTrackerReducer';
+import { Dispatch } from 'redux';
+import { RootStackParamList, CFProduct } from '../../../../App'; // Adjust if needed
+import { QRTrackerState } from '../reducers/qrTrackerReducer';
 import { orderDetailMessages } from '../constants/messages';
 import OrderDetailHeader from '../components/OrderDetailHeader';
 import ProductDetailCard from '../components/ProductDetailCard';
-import { submitOrder } from '../actions/qrTrackerThunks';
+import { submitOrder, scan } from '../actions/qrTrackerThunks';
 
 type QRTrackerOrderDetailScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -20,16 +21,16 @@ type Props = {
 };
 
 const QRTrackerOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const { products } = useSelector((state: { qrTracker: QrTrackerState }) => state.qrTracker);
+  const dispatch: Dispatch<any> = useDispatch();
+  const { products } = useSelector((state: { qrTracker: QRTrackerState }) => state.qrTracker);
 
-  const allScanned = products.every(p => p.scanned === p.shippers);
+  const allScanned = products.every((p: CFProduct) => p.scanned === p.shippers);
 
   const handleSubmitOrder = () => {
     dispatch(submitOrder(navigation));
   };
 
-  const handleReportSale = (product) => {
+  const handleReportSale = (product: CFProduct) => {
     navigation.navigate('CFReportProduct', { product });
   }
 
@@ -41,8 +42,8 @@ const QRTrackerOrderDetailScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.distributor}>{orderDetailMessages.distributor}</Text>
 
         <Text style={styles.productsTitle}>{orderDetailMessages.productsTitle}</Text>
-        {products.map(product => (
-            <ProductDetailCard product={product} onReportSale={handleReportSale} />
+        {products.map((product: CFProduct) => (
+            <ProductDetailCard product={product} onReportSale={() => handleReportSale(product)} />
         ))}
       </ScrollView>
       {allScanned && (

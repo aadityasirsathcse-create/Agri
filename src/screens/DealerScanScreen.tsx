@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,7 +15,6 @@ type Props = {
 
 const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
   const [isScanning, setIsScanning] = useState(true);
-  const cameraRef = useRef<Camera>(null);
 
   const onReadCode = (event: { nativeEvent: { codeStringValue: string } }) => {
     if (event?.nativeEvent?.codeStringValue) {
@@ -39,7 +38,6 @@ const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
       {isScanning ? (
         <View style={styles.cameraContainer}>
           <Camera
-            ref={cameraRef}
             cameraType={CameraType.Back}
             scanBarcode={true}
             showFrame={true}

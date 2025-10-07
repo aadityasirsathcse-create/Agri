@@ -12,11 +12,12 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
 import { RootStackParamList } from '../../../../App'; // Adjust if needed
 import { salesScreenMessages } from '../constants/messages';
 import SalesHeader from '../components/SalesHeader';
 import { reportSales } from '../actions/qrTrackerThunks';
-import { QrTrackerState } from '../reducers/qrTrackerReducer';
+import { QRTrackerState } from '../reducers/qrTrackerReducer';
 
 type QRTrackerSalesScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -34,9 +35,9 @@ const recentSearches = [
 ];
 
 const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<any> = useDispatch();
   const [invoiceNumber, setInvoiceNumber] = useState('');
-  const { salesError } = useSelector((state: { qrTracker: QrTrackerState }) => state.qrTracker);
+  const { salesError } = useSelector((state: { qrTracker: QRTrackerState }) => state.qrTracker);
 
   const handleReportSales = () => {
     dispatch(reportSales(invoiceNumber, navigation));
@@ -63,7 +64,7 @@ const QRTrackerSalesScreen: React.FC<Props> = ({ navigation }) => {
           {recentSearches.map(item => (
             <TouchableOpacity
               key={item.id}
-              onPress={() => navigation.navigate('CFOrderDetail')}
+              onPress={() => navigation.navigate('CFOrderDetail' as any)}
             >
               <View style={styles.recentSearchItem}>
                 <View>

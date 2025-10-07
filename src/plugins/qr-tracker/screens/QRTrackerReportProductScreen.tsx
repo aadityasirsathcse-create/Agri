@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, Scro
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import { RootStackParamList, CFProduct } from '../../../../App'; // Adjust if needed
 import { reportProductMessages } from '../constants/messages';
@@ -29,7 +30,7 @@ type Props = {
 };
 
 const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<any> = useDispatch();
   const productDetailsRef = useRef(route.params.product);
   const [barcode, setBarcode] = useState('');
   const [scannedCount, setScannedCount] = useState(route.params.product.scanned);

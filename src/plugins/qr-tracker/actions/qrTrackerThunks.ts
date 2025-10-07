@@ -2,7 +2,7 @@
 import { Dispatch } from 'redux';
 import { setSalesError, updateProduct } from './qrTrackerActions';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList, CFProduct } from '../../../App'; // Adjust this path as needed
+import { RootStackParamList, CFProduct } from '../../../../App'; // Adjust this path as needed
 
 type SalesNavigationProp = StackNavigationProp<RootStackParamList, 'CFSales'>;
 type OrderDetailNavigationProp = StackNavigationProp<RootStackParamList, 'CFOrderDetail'>;
@@ -14,7 +14,7 @@ export const reportSales = (invoiceNumber: string, navigation: SalesNavigationPr
       dispatch(setSalesError('Please enter a valid SAP code or invoice number'));
     } else {
       dispatch(setSalesError(''));
-      navigation.navigate('CFOrderDetail');
+      navigation.navigate('CFOrderDetail', {});
     }
   };
 };
