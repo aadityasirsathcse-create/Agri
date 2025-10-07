@@ -20,7 +20,7 @@ const DealerSuccessScreen: React.FC<Props> = ({ navigation }) => {
         <Icon name="check-decagram" size={100} color="#4CAF50" />
         <Text style={styles.title}>Inventory report updated</Text>
         <Text style={styles.subtitle}>Inventory report successfully updated for the order number IE0039DN30.</Text>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.pop(4)}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.pop(3)}>
           <Text style={styles.buttonText}>Okay</Text>
         </TouchableOpacity>
       </View>
