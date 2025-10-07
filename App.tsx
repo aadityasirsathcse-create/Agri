@@ -122,7 +122,7 @@ export type RootStackParamList = {
   CFSuccess: undefined;
   RetailerHome: undefined;
   RetailerScan: undefined;
-  RetailerSubmitOrder: undefined;
+  RetailerSubmitOrder: { showConfirm?: boolean };
   Success: undefined;
   DealerInventory: undefined;
   DealerScan: undefined;

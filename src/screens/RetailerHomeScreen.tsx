@@ -33,7 +33,7 @@ const RetailerHomeScreen: React.FC<Props> = ({ navigation }) => {
           <View key={index} style={styles.orderCard}>
             <Text style={styles.orderId}>Order #{orderId}</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('RetailerSubmitOrder')}
+              onPress={() => navigation.navigate('RetailerSubmitOrder', { showConfirm: false })}
             >
               <Text style={styles.arrow}>→</Text>
             </TouchableOpacity>

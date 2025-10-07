@@ -38,7 +38,7 @@ const RetailerScanScreen: React.FC<Props> = ({ navigation }) => {
   const handleOkPress = () => {
     setBottomSheetVisible(false);
     setScanState('scanning');
-    navigation.navigate('RetailerSubmitOrder');
+    navigation.navigate('RetailerSubmitOrder', { showConfirm: true });
   };
 
   return (
