@@ -60,6 +60,13 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
     dispatch(scan(updatedProduct, navigation));
   };
 
+  const handleAddBarcode = () => {
+    if (barcode.trim() !== '' && scannedCount < productDetailsRef.current.shippers) {
+      setScannedCount(prevCount => prevCount + 1);
+      setBarcode('');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ReportProductHeader
@@ -69,12 +76,17 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
       <ScrollView style={styles.content}>
         <ProgressBar scanned={scannedCount} total={productDetailsRef.current.shippers} />
         <ProductDetailCard product={productDetailsRef.current} onReportSale={() => {}} />
-        <TextInput
-          style={styles.input}
-          placeholder={reportProductMessages.barcodePlaceholder}
-          value={barcode}
-          onChangeText={setBarcode}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder={reportProductMessages.barcodePlaceholder}
+            value={barcode}
+            onChangeText={setBarcode}
+          />
+          <TouchableOpacity style={styles.addButton} onPress={handleAddBarcode}>
+            <Text style={styles.addButtonText}>Add</Text>
+          </TouchableOpacity>
+        </View>
         <Text style={styles.orText}>{reportProductMessages.orText}</Text>
         <ScanButton onPress={handleScan} />
       </ScrollView>
@@ -97,14 +109,29 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   input: {
+    flex: 1,
     backgroundColor: '#fff',
     borderRadius: 5,
     padding: 15,
-    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#ddd',
     textAlign: 'left',
+  },
+  addButton: {
+    marginLeft: 10,
+    backgroundColor: '#4CAF50',
+    padding: 15,
+    borderRadius: 5,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   orText: {
     textAlign: 'center',
