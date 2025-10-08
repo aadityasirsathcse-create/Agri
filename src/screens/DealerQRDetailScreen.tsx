@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: 'green',
     fontWeight: 'bold',
+    marginRight:3,
   },
   productContainer: {
     backgroundColor: '#fff',

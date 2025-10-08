@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 
@@ -19,8 +20,15 @@ const RetailerSubmitOrderScreen: React.FC<Props> = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Icon name="arrow-left" size={24} color="#000" />
+                </TouchableOpacity>
+                <Text style={styles.headerTitle}>QR Details</Text>
+                <Icon name="bell-outline" size={24} />
+              </View>
       <ScrollView>
-        <View style={styles.header}>
+        <View style={styles.order}>
           <Text style={styles.headerTitle}>Order #IE0039DN30</Text>
         </View>
 
@@ -58,13 +66,20 @@ const RetailerSubmitOrderScreen: React.FC<Props> = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e5f9e5ff',
   },
-  header: {
-    backgroundColor: '#fff',
+   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 40,
-    borderBottomWidth: 1,
+    backgroundColor: '#fff',
+  },
+  order: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    //borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
   headerTitle: {
