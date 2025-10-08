@@ -382,6 +382,7 @@ const styles = StyleSheet.create({
     height: 24,
     marginBottom: 5,
     margin: 10,
+    marginLeft: 3,
   },
 });
 

@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
@@ -14,34 +23,48 @@ type Props = {
 };
 
 const OrderFilterScreen: React.FC<Props> = ({ navigation }) => {
+  const handleApplyFilters = () => {
+    navigation.goBack();
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Filters Orders</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name="close" size={24} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.content}>
-        <Text style={styles.label}>Order Price Range</Text>
-        <View style={styles.rangeContainer}>
-          <TextInput placeholder="Minimum" style={styles.input} />
-          <TextInput placeholder="Maximum" style={styles.input} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Filters Orders</Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="close" size={24} />
+          </TouchableOpacity>
         </View>
-        <Text style={styles.label}>No. of order items</Text>
-        <View style={styles.rangeContainer}>
-          <TextInput placeholder="Minimum" style={styles.input} />
-          <TextInput placeholder="Maximum" style={styles.input} />
+        <View style={styles.content}>
+          <Text style={styles.label}>Order Price Range</Text>
+          <View style={styles.rangeContainer}>
+            <TextInput placeholder="Minimum" style={styles.input} />
+            <TextInput placeholder="Maximum" style={styles.input} />
+          </View>
+          <Text style={styles.label}>No. of order items</Text>
+          <View style={styles.rangeContainer}>
+            <TextInput placeholder="Minimum" style={styles.input} />
+            <TextInput placeholder="Maximum" style={styles.input} />
+          </View>
         </View>
-      </View>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.outlineButton}>
-          <Text style={styles.outlineButtonText}>Reset to Default</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.solidButton}>
-          <Text style={styles.solidButtonText}>Apply Filters</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.footer}>
+          <TouchableOpacity
+            style={styles.outlineButton}
+            onPress={handleApplyFilters}
+          >
+            <Text style={styles.outlineButtonText}>Reset to Default</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.solidButton}
+            onPress={handleApplyFilters}
+          >
+            <Text style={styles.solidButtonText}>Apply Filters</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -83,6 +106,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 4,
     backgroundColor: '#fff',
+    color: 'black',
   },
   footer: {
     flexDirection: 'row',

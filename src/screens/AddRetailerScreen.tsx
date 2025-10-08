@@ -26,6 +26,12 @@ type Props = {
 const AddRetailerScreen: React.FC<Props> = ({ navigation }) => {
   const [whatsappSameAsMobile, setWhatsappSameAsMobile] = useState(false);
 
+   const handleCreateAccount = () => {
+    // Logic to add the farmer would go here.
+    // After creating the account, navigate back to the previous screen.
+    navigation.goBack();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -109,7 +115,9 @@ const AddRetailerScreen: React.FC<Props> = ({ navigation }) => {
           </View>
         </ScrollView>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.createButton}>
+          <TouchableOpacity style={styles.createButton}
+          onPress={handleCreateAccount}
+          >
             <Text style={styles.createButtonText}>Create Account</Text>
           </TouchableOpacity>
         </View>
