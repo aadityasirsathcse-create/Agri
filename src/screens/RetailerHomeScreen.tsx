@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStackParamList } from '../../App';
 
 type RetailerHomeScreenNavigationProp = StackNavigationProp<
@@ -24,8 +25,13 @@ const RetailerHomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerName}>Harish Ramu</Text>
-        <Text style={styles.headerRole}>Retailer</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-left" size={24} color="#000" />
+        </TouchableOpacity>
+        <View>
+          <Text style={styles.headerName}>Harish Ramu</Text>
+          <Text style={styles.headerRole}>Retailer</Text>
+        </View>
       </View>
       <ScrollView style={styles.content}>
         <Text style={styles.historyTitle}>Report History</Text>
@@ -33,7 +39,11 @@ const RetailerHomeScreen: React.FC<Props> = ({ navigation }) => {
           <View key={index} style={styles.orderCard}>
             <Text style={styles.orderId}>Order #{orderId}</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('RetailerSubmitOrder', { showConfirm: false })}
+              onPress={() =>
+                navigation.navigate('RetailerSubmitOrder', {
+                  showConfirm: false,
+                })
+              }
             >
               <Text style={styles.arrow}>→</Text>
             </TouchableOpacity>
@@ -59,6 +69,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9F5E9',
     paddingHorizontal: 20,
     paddingVertical: 40,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    gap: 18,
   },
   headerName: {
     fontSize: 20,
