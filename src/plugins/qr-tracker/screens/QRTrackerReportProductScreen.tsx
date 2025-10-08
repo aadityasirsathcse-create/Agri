@@ -71,11 +71,14 @@ const QRTrackerReportProductScreen: React.FC<Props> = ({ navigation, route }) =>
 
   const isComplete = scannedCount === productDetails.shippers;
 
-  const handleConfirm = () => {
-    if (isComplete) {
-      dispatch(reportProduct(productDetails, navigation));
-    }
-  };
+const handleConfirm = () => {
+  if (isComplete) {
+    navigation.goBack();
+    dispatch(reportProduct(productDetails, navigation));
+    
+  }
+};
+
 
   const handleScan = () => {
     dispatch(scan(productDetails, navigation));

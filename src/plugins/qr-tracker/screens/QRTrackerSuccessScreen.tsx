@@ -25,7 +25,7 @@ const QRTrackerSuccessScreen: React.FC<Props> = ({ navigation }) => {
   style={styles.button}
   onPress={() => {
     const state = navigation.getState();
-    const firstFive = state.routes.slice(0, 4);
+    const firstFive = state.routes.slice(0, 1);
 
     navigation.dispatch(
       CommonActions.reset({

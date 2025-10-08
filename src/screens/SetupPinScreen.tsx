@@ -60,19 +60,24 @@ const SetupPinScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    const isPinComplete = pin.every(digit => digit !== '');
-    const isConfirmPinComplete = confirmPin.every(digit => digit !== '');
-    if (isPinComplete && isConfirmPinComplete) {
-      if (pin.join('') === confirmPin.join('')) {
-        // PINs match, proceed with navigation
-         navigation.navigate('Main');
-      } else {
-        alert('PINs do not match.');
-      }
+  const isPinComplete = pin.every(digit => digit !== '');
+  const isConfirmPinComplete = confirmPin.every(digit => digit !== '');
+  
+  if (isPinComplete && isConfirmPinComplete) {
+    if (pin.join('') === confirmPin.join('')) {
+      // Clear navigation history and go to Main
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     } else {
-      alert('Please fill out both PIN and Confirm PIN fields.');
+      alert('PINs do not match.');
     }
-  };
+  } else {
+    alert('Please fill out both PIN and Confirm PIN fields.');
+  }
+};
+
 
 
   return (
