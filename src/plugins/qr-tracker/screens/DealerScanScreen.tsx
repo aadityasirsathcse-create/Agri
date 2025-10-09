@@ -4,17 +4,20 @@ import { StyleSheet, Text, View, ActivityIndicator, Modal, TouchableOpacity } fr
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as Animatable from 'react-native-animatable';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList } from '../../../../App';
 
-type RetailerScanScreenNavigationProp = StackNavigationProp<RootStackParamList, 'RetailerScan'>;
+type DealerScanScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'DealerScan'
+>;
 
 type Props = {
-  navigation: RetailerScanScreenNavigationProp;
+  navigation: DealerScanScreenNavigationProp;
 };
 
 type ScanState = 'scanning' | 'verifying' | 'verified';
 
-const RetailerScanScreen: React.FC<Props> = ({ navigation }) => {
+const DealerScanScreen: React.FC<Props> = ({ navigation }) => {
   const [scanState, setScanState] = useState<ScanState>('scanning');
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
 
@@ -38,7 +41,7 @@ const RetailerScanScreen: React.FC<Props> = ({ navigation }) => {
   const handleOkPress = () => {
     setBottomSheetVisible(false);
     setScanState('scanning');
-    navigation.navigate('RetailerSubmitOrder', { showConfirm: true });
+    navigation.navigate('DealerQRDetail', { showConfirm: true });
   };
 
   return (
@@ -137,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RetailerScanScreen;
+export default DealerScanScreen;

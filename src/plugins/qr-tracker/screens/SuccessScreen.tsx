@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList } from '../../../../App';
 
 type SuccessScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Success'>;
 
@@ -13,7 +13,7 @@ type Props = {
 const SuccessScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/success.png')} style={styles.successIcon} />
+      <Image source={require('../../../assets/success.png')} style={styles.successIcon} />
       <Text style={styles.title}>Usage report updated</Text>
       <Text style={styles.subtitle}>
         Usage report successfully updated for the order number IE0039DN30.

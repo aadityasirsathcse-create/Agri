@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList } from '../../../../App';
 
 type DealerInventoryScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -35,7 +35,7 @@ const DealerInventoryScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.profileContainer}>
-            <Image source={require('../assets/user.png')} style={styles.profileImage} />
+            <Image source={require('../../../assets/user.png')} style={styles.profileImage} />
             <View>
               <Text style={styles.profileName}>Harish Ramu</Text>
               <Text style={styles.profileRole}>Dealer</Text>
