@@ -120,6 +120,7 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
           </Text>
           {historyItems.map((item, index) => (
             <View key={index} style={styles.historyItemWrapper}>
+              <TouchableOpacity onPress={() => toggleExpand(index)}>
               <View style={styles.historyItem}>
                 <Image source={item.image} style={styles.itemImage} />
                 <View style={styles.itemDetails}>
@@ -137,7 +138,6 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
                     </Text>
                   </Text>
                 </View>
-                <TouchableOpacity onPress={() => toggleExpand(index)}>
                   <Image
                     source={
                       expandedIndex === index
@@ -146,8 +146,8 @@ const RewardHistoryScreen: React.FC<Props> = ({ navigation }) => {
                     }
                     style={styles.arrowIcon}
                   />
-                </TouchableOpacity>
               </View>
+              </TouchableOpacity>
               {expandedIndex === index && (
                 <View style={styles.expandedDetails}>
                   <View style={styles.detailRow}>

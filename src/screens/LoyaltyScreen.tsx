@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,10 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,11 +20,91 @@ type LoyaltyScreenNavigationProp = StackNavigationProp<
   'Loyalty'
 >;
 
+type Reward = {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+};
+
 type Props = {
   navigation: LoyaltyScreenNavigationProp;
 };
 
 const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
+  const [availablePoints, setAvailablePoints] = useState<number | null>(null);
+  const [totalEarned, setTotalEarned] = useState<number | null>(null);
+  const [totalSpent, setTotalSpent] = useState<number | null>(null);
+  const [rewards, setRewards] = useState<Reward[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingInitial, setLoadingInitial] = useState(true);
+
+  const isFocused = useIsFocused();
+  const isMounted = useRef(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (isFocused) {
+        fetchRandomNumbers();
+        fetchRewards(1, true);
+      }
+      isMounted.current = true;
+    }, [isFocused]),
+  );
+
+  const fetchRandomNumbers = async () => {
+    try {
+      const response = await fetch(
+        'https://www.random.org/integers/?num=3&min=100&max=1000&col=1&base=10&format=plain&rnd=new',
+      );
+      const text = await response.text();
+      const [a, b, c] = text.trim().split('\n').map(Number);
+      setAvailablePoints(a);
+      setTotalEarned(b);
+      setTotalSpent(c);
+    } catch (error) {
+      console.error('Error fetching random numbers:', error);
+      setAvailablePoints(0);
+      setTotalEarned(0);
+      setTotalSpent(0);
+    }
+  };
+
+  const fetchRewards = async (pageNum = page, reset = false) => {
+    if (!hasMore) return;
+
+    setLoadingInitial(true);
+
+    try {
+      const response = await fetch(`https://fakestoreapi.com/products`);
+      const data = await response.json();
+
+      const start = (pageNum - 1) * 5;
+      const end = start + 5;
+      const pagedData = data.slice(start, end);
+
+      if (pagedData.length === 0) {
+        setHasMore(false);
+      } else {
+        setRewards(prev => (reset ? pagedData : [...prev, ...pagedData]));
+        setPage(pageNum + 1);
+      }
+    } catch (err) {
+      console.error('Error fetching products:', err);
+    } finally {
+      setLoading(false);
+      setLoadingInitial(false);
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!loadingInitial && hasMore) {
+      fetchRewards(page);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -42,46 +125,62 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
 
         <View style={styles.rewardsSummary}>
           <Text style={styles.summaryTitle}>Rewards Summary</Text>
-          <View style={styles.summaryContent}>
-            <View style={styles.pointsContainer}>
-              <Text style={styles.points}>670</Text>
-              <Text style={styles.pointsLabel}>Available points</Text>
-              <Text style={styles.pointsSubLabel}>
-                Gained through 42 purchases & 4 quiz
-              </Text>
+
+          {loading ? (
+            <ActivityIndicator size="large" color="#4CAF50" />
+          ) : (
+            <View style={styles.summaryContent}>
+              <View style={styles.pointsContainer}>
+                <Text style={styles.points}>{availablePoints}</Text>
+                <Text style={styles.pointsLabel}>Available points</Text>
+                <Text style={styles.pointsSubLabel}></Text>
+              </View>
+              <Image
+                source={require('../assets/trophy.png')}
+                style={styles.trophyImage}
+              />
             </View>
-            <Image
-              source={require('../assets/trophy.png')}
-              style={styles.trophyImage}
-            />
-          </View>
+          )}
+
           <View
             style={{ height: 1, backgroundColor: '#ccc', marginVertical: 10 }}
-          ></View>
-          <View style={styles.pointsBreakdown}>
-            <View style={styles.breakdownItem}>
-              <Image
-                source={require('../assets/points.png')}
-                style={styles.navIcon}
-              />
+          />
 
-              <View>
-                <Text style={styles.breakdownValue}>870</Text>
-                <Text style={styles.breakdownLabel}>Total Points Earned</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color="#4CAF50" />
+          ) : (
+            <View style={styles.pointsBreakdown}>
+              <View style={styles.breakdownItem}>
+                <Image
+                  source={require('../assets/points.png')}
+                  style={styles.navIcon}
+                />
+                <View>
+                  <Text style={styles.breakdownValue}>{totalEarned}</Text>
+                  <Text style={styles.breakdownLabel}>Total Points Earned</Text>
+                </View>
+              </View>
+              <View style={styles.breakdownItem}>
+                <Image
+                  source={require('../assets/spend.png')}
+                  style={styles.navIcon}
+                />
+                <View>
+                  <Text style={styles.breakdownValue}>{totalSpent}</Text>
+                  <Text style={styles.breakdownLabel}>Total Points Spent</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.breakdownItem}>
-              <Image
-                source={require('../assets/spend.png')}
-                style={styles.navIcon}
-              />
+          )}
 
-              <View>
-                <Text style={styles.breakdownValue}>200</Text>
-                <Text style={styles.breakdownLabel}>Total points spent</Text>
-              </View>
-            </View>
-          </View>
+          {/* <TouchableOpacity
+            onPress={fetchRandomNumbers}
+            style={{ marginTop: 10 }}
+          >
+            <Text style={{ color: '#4CAF50', textAlign: 'center' }}>
+              ↻ Refresh Points
+            </Text>
+          </TouchableOpacity> */}
         </View>
 
         <View style={styles.actions}>
@@ -116,41 +215,40 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               <Text style={styles.viewAll}>View all →</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.rewardItems}>
-            <View style={styles.rewardItem}>
-              <Image
-                source={require('../assets/amazon.png')}
-                style={styles.rewardImage}
-              />
-              <Text style={styles.rewardName}>Amazon gift card</Text>
-              <Text style={styles.rewardValue}>Worth $5000*</Text>
-              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
-                <Text style={styles.claimButtonText}>Claim</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rewardItem}>
-              <Image
-                source={require('../assets/air.png')}
-                style={styles.rewardImage}
-              />
-              <Text style={styles.rewardName}>Family trip to </Text>
-              <Text style={styles.rewardValue}>Worth $5000*</Text>
-              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
-                <Text style={styles.claimButtonText}>Claim</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.rewardItem}>
-              <Image
-                source={require('../assets/chroma.png')}
-                style={styles.rewardImage}
-              />
-              <Text style={styles.rewardName}>Croma discount coupon</Text>
-              <Text style={styles.rewardValue}>30% off. Up to 2,500</Text>
-              <TouchableOpacity style={styles.claimButton} onPress={() => navigation.navigate('AllRewards')}>
-                <Text style={styles.claimButtonText}>Claim</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+
+          <FlatList
+            horizontal
+            data={rewards}
+            keyExtractor={item => item.id.toString()}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.rewardItems}
+            renderItem={({ item }) => (
+              <View style={styles.rewardItem}>
+                <Image
+                  source={{ uri: item.image }}
+                  style={styles.rewardImage}
+                  resizeMode="contain"
+                />
+                <Text style={styles.rewardName} numberOfLines={1}>
+                  {item.title}
+                </Text>
+                <Text style={styles.rewardValue}>${item.price}</Text>
+                <TouchableOpacity
+                  style={styles.claimButton}
+                  onPress={() => navigation.navigate('AllRewards')}
+                >
+                  <Text style={styles.claimButtonText}>Claim</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+              loadingInitial && hasMore ? (
+                <ActivityIndicator size="small" color="#4CAF50" />
+              ) : null
+            }
+          />
         </View>
       </ScrollView>
       {/* Bottom Tab Navigator Placeholder
@@ -324,6 +422,9 @@ const styles = StyleSheet.create({
   viewAll: {
     color: '#4CAF50',
   },
+  rewardContainer: {
+    marginVertical: 1,
+  },
   rewardItems: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -332,8 +433,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#c3f9c3ff',
     borderRadius: 15,
     padding: 10,
-    width: '32%',
+    width: 140,
     alignItems: 'center',
+    margin: 6,
   },
   rewardImage: {
     width: 60,

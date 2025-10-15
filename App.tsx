@@ -171,7 +171,7 @@ const App = () => {
     <Provider store={store}>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#E9F5E9' }}>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator initialRouteName='Main' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Otp" component={OtpScreen} />
             <Stack.Screen name="SetupPin" component={SetupPinScreen} />
