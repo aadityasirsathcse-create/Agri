@@ -14,6 +14,7 @@ import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Skeleton } from '@rneui/themed';
 
 type LoyaltyScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -73,9 +74,10 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const fetchRewards = async (pageNum = page, reset = false) => {
-    if (!hasMore) return;
+    if (loading || !hasMore) return;
 
-    setLoadingInitial(true);
+    setLoading(true);
+    if (pageNum === 1) setLoadingInitial(true);
 
     try {
       const response = await fetch(`https://fakestoreapi.com/products`);
@@ -100,10 +102,23 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleLoadMore = () => {
-    if (!loadingInitial && hasMore) {
+    if (!loading && hasMore) {
       fetchRewards(page);
     }
   };
+
+  const renderRewardSkeleton = () => (
+    <View style={{ flexDirection: 'row' }}>
+      {[...Array(3)].map((_, i) => (
+        <View key={i} style={styles.rewardItem}>
+          <Skeleton circle width={60} height={60} />
+          <Skeleton height={20} width={100} style={{ marginTop: 10 }} />
+          <Skeleton height={20} width={80} style={{ marginTop: 6 }} />
+          <Skeleton height={40} width={100} style={{ marginTop: 10, borderRadius: 8 }} />
+        </View>
+      ))}
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -126,61 +141,73 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.rewardsSummary}>
           <Text style={styles.summaryTitle}>Rewards Summary</Text>
 
-          {loading ? (
-            <ActivityIndicator size="large" color="#4CAF50" />
-          ) : (
-            <View style={styles.summaryContent}>
-              <View style={styles.pointsContainer}>
-                <Text style={styles.points}>{availablePoints}</Text>
-                <Text style={styles.pointsLabel}>Available points</Text>
-                <Text style={styles.pointsSubLabel}></Text>
+          {loadingInitial ? (
+            <View>
+              <View style={styles.summaryContent}>
+                <View>
+                  <Skeleton height={32} width={120} />
+                  <Skeleton height={20} width={150} style={{ marginTop: 6 }} />
+                </View>
+                <Skeleton circle width={100} height={100} />
               </View>
-              <Image
-                source={require('../assets/trophy.png')}
-                style={styles.trophyImage}
+              <View style={{ height: 1, backgroundColor: '#ccc', marginVertical: 10 }} />
+              <View style={styles.pointsBreakdown}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Skeleton circle width={40} height={40} />
+                  <View style={{ marginLeft: 10 }}>
+                    <Skeleton height={20} width={80} />
+                    <Skeleton height={16} width={120} style={{ marginTop: 6 }} />
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Skeleton circle width={40} height={40} />
+                  <View style={{ marginLeft: 10 }}>
+                    <Skeleton height={20} width={80} />
+                    <Skeleton height={16} width={120} style={{ marginTop: 6 }} />
+                  </View>
+                </View>
+              </View>
+            </View>
+          ) : (
+            <>
+              <View style={styles.summaryContent}>
+                <View style={styles.pointsContainer}>
+                  <Text style={styles.points}>{availablePoints}</Text>
+                  <Text style={styles.pointsLabel}>Available points</Text>
+                  <Text style={styles.pointsSubLabel}></Text>
+                </View>
+                <Image
+                  source={require('../assets/trophy.png')}
+                  style={styles.trophyImage}
+                />
+              </View>
+              <View
+                style={{ height: 1, backgroundColor: '#ccc', marginVertical: 10 }}
               />
-            </View>
-          )}
-
-          <View
-            style={{ height: 1, backgroundColor: '#ccc', marginVertical: 10 }}
-          />
-
-          {loading ? (
-            <ActivityIndicator size="small" color="#4CAF50" />
-          ) : (
-            <View style={styles.pointsBreakdown}>
-              <View style={styles.breakdownItem}>
-                <Image
-                  source={require('../assets/points.png')}
-                  style={styles.navIcon}
-                />
-                <View>
-                  <Text style={styles.breakdownValue}>{totalEarned}</Text>
-                  <Text style={styles.breakdownLabel}>Total Points Earned</Text>
+              <View style={styles.pointsBreakdown}>
+                <View style={styles.breakdownItem}>
+                  <Image
+                    source={require('../assets/points.png')}
+                    style={styles.navIcon}
+                  />
+                  <View>
+                    <Text style={styles.breakdownValue}>{totalEarned}</Text>
+                    <Text style={styles.breakdownLabel}>Total Points Earned</Text>
+                  </View>
+                </View>
+                <View style={styles.breakdownItem}>
+                  <Image
+                    source={require('../assets/spend.png')}
+                    style={styles.navIcon}
+                  />
+                  <View>
+                    <Text style={styles.breakdownValue}>{totalSpent}</Text>
+                    <Text style={styles.breakdownLabel}>Total Points Spent</Text>
+                  </View>
                 </View>
               </View>
-              <View style={styles.breakdownItem}>
-                <Image
-                  source={require('../assets/spend.png')}
-                  style={styles.navIcon}
-                />
-                <View>
-                  <Text style={styles.breakdownValue}>{totalSpent}</Text>
-                  <Text style={styles.breakdownLabel}>Total Points Spent</Text>
-                </View>
-              </View>
-            </View>
+            </>
           )}
-
-          {/* <TouchableOpacity
-            onPress={fetchRandomNumbers}
-            style={{ marginTop: 10 }}
-          >
-            <Text style={{ color: '#4CAF50', textAlign: 'center' }}>
-              ↻ Refresh Points
-            </Text>
-          </TouchableOpacity> */}
         </View>
 
         <View style={styles.actions}>
@@ -192,7 +219,6 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               source={require('../assets/cal.png')}
               style={styles.navIcon}
             />
-
             <Text style={styles.actionText}>Points Calculator</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -203,7 +229,6 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
               source={require('../assets/cal.png')}
               style={styles.navIcon}
             />
-
             <Text style={styles.actionText}>Rewards History</Text>
           </TouchableOpacity>
         </View>
@@ -216,77 +241,45 @@ const LoyaltyScreen: React.FC<Props> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <FlatList
-            horizontal
-            data={rewards}
-            keyExtractor={item => item.id.toString()}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.rewardItems}
-            renderItem={({ item }) => (
-              <View style={styles.rewardItem}>
-                <Image
-                  source={{ uri: item.image }}
-                  style={styles.rewardImage}
-                  resizeMode="contain"
-                />
-                <Text style={styles.rewardName} numberOfLines={1}>
-                  {item.title}
-                </Text>
-                <Text style={styles.rewardValue}>${item.price}</Text>
-                <TouchableOpacity
-                  style={styles.claimButton}
-                  onPress={() => navigation.navigate('AllRewards')}
-                >
-                  <Text style={styles.claimButtonText}>Claim</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={
-              loadingInitial && hasMore ? (
-                <ActivityIndicator size="small" color="#4CAF50" />
-              ) : null
-            }
-          />
+          {loadingInitial ? (
+            renderRewardSkeleton()
+          ) : (
+            <FlatList
+              horizontal
+              data={rewards}
+              keyExtractor={item => item.id.toString()}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.rewardItems}
+              renderItem={({ item }) => (
+                <View style={styles.rewardItem}>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.rewardImage}
+                    resizeMode="contain"
+                  />
+                  <Text style={styles.rewardName} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.rewardValue}>${item.price}</Text>
+                  <TouchableOpacity
+                    style={styles.claimButton}
+                    onPress={() => navigation.navigate('AllRewards')}
+                  >
+                    <Text style={styles.claimButtonText}>Claim</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={
+                loading && !loadingInitial ? (
+                  <ActivityIndicator size="small" color="#4CAF50" />
+                ) : null
+              }
+            />
+          )}
         </View>
       </ScrollView>
-      {/* Bottom Tab Navigator Placeholder
-      <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Loyalty')}
-        >
-          <Icon name="trophy-outline" size={24} style={styles.navIcon} />
-          <Text style={{ color: '#4CAF50' }}>Loyalty</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Social')}
-        >
-          <Icon name="account-group-outline" size={24} style={styles.navIcon} />
-          <Text>Social</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Products')}
-        >
-          <Icon name="store-outline" size={24} style={styles.navIcon} />
-          <Text>Products</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon
-            name="clipboard-text-outline"
-            size={24}
-            style={styles.navIcon}
-          />
-          <Text>My Activities</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon name="dots-horizontal" size={24} style={styles.navIcon} />
-          <Text>More</Text>
-        </TouchableOpacity>
-      </View> */}
     </SafeAreaView>
   );
 };
