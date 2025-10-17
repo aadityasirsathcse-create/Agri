@@ -75,7 +75,7 @@ const AnalyticsScreen: React.FC<Props> = ({ navigation }) => {
             </View>
         </View>
 
-        <View style={styles.card}>
+        {/* <View style={styles.card}>
             <Text style={styles.cardTitle}>2025 - Summary</Text>
             {summaryData.map(item => (
                 <View key={item.label} style={styles.summaryRow}>
@@ -86,7 +86,7 @@ const AnalyticsScreen: React.FC<Props> = ({ navigation }) => {
                     <Text style={styles.summaryRowValue}>{item.value}</Text>
                 </View>
             ))}
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
